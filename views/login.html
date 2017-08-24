@@ -4,53 +4,93 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
     <title>
         <%= title %>
     </title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel='stylesheet' href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css'>
-    <style>
-        .hide-div{
-            display: none;
+    <link rel='stylesheet' href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css' />
+</head>
+    
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#" onclick="return false;">MYTK</a>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div>
+                    <img src="/images/logo_big.png" class="img-responsive" alt="logo">
+                </div>
+                <div class="signin-div hidden">
+                    <form action="" method="post" onsubmit="return false;" id="form_in">
+                        <div class="form-group"> 
+                            <input class="form-control" type="text" id="account_in" placeholder="ACCOUNT" />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="password" id="password_in" placeholder="PASSWORD" />
+                        </div>
+                        <button type="button" class="btn btn-primary btn-lg btn-block" onclick="signIn();">Sign In</button>
+                        <button type="button" class="btn btn-info btn-lg btn-block" onclick="change('Sign Up');">Sign Up</button>
+                    </form>
+                </div>
+                <div class="signup-div hidden">
+                    <form action="" method="post" onsubmit="return false;" id="form_up">
+                        <div class="form-group">
+                            <input class="form-control" type="text" id="account_up" placeholder="ACCOUNT" />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="password" id="password_up" placeholder="PASSWORD" />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" id="tel" placeholder="TELPHONE" />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" id="email" placeholder="EMAIL" />
+                        </div>
+
+                        <button type="button" class="btn btn-primary btn-lg btn-block" onclick="signUp();">Sign Up</button>
+                        <button type="button" class="btn btn-info btn-lg btn-block" onclick="change('Sign In');">Sign In</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function () {
+            var divIn = document.getElementsByClassName('signin-div')[0];
+            divIn.classList.remove('hidden');
         }
 
-    </style>
-</head>
+        function change(index) {
+            var divUp = document.getElementsByClassName('signup-div')[0];
+            var divIn = document.getElementsByClassName('signin-div')[0];
 
-<body>
-    <div class="signin-div hide-div">
-        <form action="" method="post" onsubmit="return false;">
-            <div>
-                <input type="text" id="account" placeholder="ACCOUNT" />
-            </div>
-            <div>
-                <input type="password" id="password" placeholder="PASSWORD" />
-            </div>
-            <button onclick="signIn();">Sign In</button>
-            <button onclick="change('Sign Up');">Sign Up</button>
-        </form>
-    </div>
-    <div class="signup-div hide-div">
-        <form action="" method="post" onsubmit="return false;">
-            <div>
-                <input type="text" id="account" placeholder="ACCOUNT" />
-            </div>
-            <div>
-                <input type="password" id="password" placeholder="PASSWORD" />
-            </div>
-            <div>
-                <input type="text" id="tel" placeholder="TelPhone" />
-            </div>
-            <div>
-                <input type="text" id="email" placeholder="Email" />
-            </div>
-            
-            <button onclick="signUp();">Sign Up</button>
-            <button onclick="change('Sign In');">Sign In</button>
-        </form>
-    </div>
+            if (index == 'Sign In') {
+                divIn.classList.remove('hidden');
+                divIn.classList.remove('hidden');
+                divUp.classList.add('hidden');
+                document.getElementById('form_up').reset();
+            }
 
-    
+            if (index == 'Sign Up') {
+                divIn.classList.add('hidden');
+                divUp.classList.remove('hidden');
+                document.getElementById('form_in').reset();
+            }
+
+        }
+    </script>
 
     <script>
         function signIn() {
@@ -59,27 +99,6 @@
 
         function signUp() {
             alert('register')
-        }
-
-        function change(index){
-            var divUp = document.getElementsByClassName('signup-div')[0];
-            var divIn = document.getElementsByClassName('signin-div')[0];
-
-            if(index == 'Sign In'){
-                divIn.classList.remove('hide-div');
-                divUp.classList.add('hide-div');
-            }
-
-            if(index == 'Sign Up' ){
-                divIn.classList.add('hide-div');
-                divUp.classList.remove('hide-div');
-            }
-
-        }
-
-        window.onload = function (){
-            var divIn = document.getElementsByClassName('signin-div')[0];
-            divIn.classList.remove('hide-div');
         }
     </script>
 
