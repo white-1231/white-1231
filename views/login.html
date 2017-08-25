@@ -31,7 +31,7 @@
                     <img src="/images/logo_big.png" class="img-responsive" alt="logo">
                 </div>
                 <div class="signin-div hidden">
-                    <form action="" method="post" onsubmit="return false;" id="form_in">
+                    <form class="form-horizontal" action="" method="post" onsubmit="return false;" id="form_in">
                         <div class="form-group"> 
                             <input class="form-control" type="text" id="account_in" placeholder="ACCOUNT" />
                         </div>
@@ -43,18 +43,30 @@
                     </form>
                 </div>
                 <div class="signup-div hidden">
-                    <form action="" method="post" onsubmit="return false;" id="form_up">
-                        <div class="form-group">
-                            <input class="form-control" type="text" id="account_up" placeholder="ACCOUNT" />
+                    <form class="form-horizontal" action="" method="post" onsubmit="return false;" id="form_up">
+                        <div class="form-group has-feedback">
+                            <input class="form-control" type="text" id="account_up" placeholder="ACCOUNT" onblur="checkAccount(this);" />
+                            <div class="hidden" id="account_error_icon">
+                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <input class="form-control" type="password" id="password_up" placeholder="PASSWORD" />
+                        <div class="form-group has-feedback">
+                            <input class="form-control" type="password" id="password_up" placeholder="PASSWORD" onblur="checkPassword(this);"/>
+                            <div class="hidden" id="password_error_icon">
+                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <input class="form-control" type="text" id="tel" placeholder="TELPHONE" />
+                        <div class="form-group has-feedback">
+                            <input class="form-control" type="text" id="tel" placeholder="TELPHONE" onblur="checkTEL(this);"/>
+                            <div class="hidden" id="tel_error_icon">
+                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <input class="form-control" type="text" id="email" placeholder="EMAIL" />
+                        <div class="form-group has-feedback">
+                            <input class="form-control" type="text" id="email" placeholder="EMAIL" onblur="checkEmail(this);"/>
+                            <div class="hidden" id="email_error_icon">
+                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                            </div>
                         </div>
 
                         <button type="button" class="btn btn-primary btn-lg btn-block" onclick="signUp();">Sign Up</button>
@@ -78,7 +90,6 @@
 
             if (index == 'Sign In') {
                 divIn.classList.remove('hidden');
-                divIn.classList.remove('hidden');
                 divUp.classList.add('hidden');
                 document.getElementById('form_up').reset();
             }
@@ -90,16 +101,110 @@
             }
 
         }
+
+    </script>
+
+    <script>
+        function signUp() {
+            var account = $('#account_up').val();
+            var password = $('#password_up').val();
+            var tel = $('#tel').val();
+            var email = $('#email').val();
+        }
     </script>
 
     <script>
         function signIn() {
             alert('sign in');
         }
+    </script>
 
-        function signUp() {
-            alert('register')
+    <script>
+        function checkAccount(account){
+            var pat = /^[a-zA-Z0-9]{6,16}$/;
+
+            if( 'object' == typeof account){
+                //onblur
+                if(!pat.test(account.value)){
+                    $('#account_error_icon').removeClass('hidden');                    
+                }else{
+                    $('#account_error_icon').addClass('hidden');                 
+                }
+            }else{
+                //submit
+                if(!pat.test(account)){
+                   return false;
+                }else{
+                    return true;
+                }
+
+            }
         }
+
+        function checkPassword(password){
+            var pat = /^[a-zA-Z0-9]{6,16}$/;
+
+            if( 'object' == typeof password){
+                //onblur
+                if(!pat.test(password.value)){
+                    $('#password_error_icon').removeClass('hidden');              
+                }else{
+                    $('#password_error_icon').addClass('hidden');                   
+                }
+            }else{
+                //submit
+                if(!pat.test(password)){
+                   return false;
+                }else{
+                    return true;
+                }
+
+            }
+        }
+
+        function checkTEL(tel){
+            var pat = /^(13[0-9]|14[5|7]|15\d|18\d)\d{8}$/;
+
+            if( 'object' == typeof tel){
+                //onblur
+                if(!pat.test(tel.value)){
+                    $('#tel_error_icon').removeClass('hidden');    
+                }else{
+                    $('#tel_error_icon').addClass('hidden');               
+                }
+            }else{
+                //submit
+                if(!pat.test(tel)){
+                   return false;
+                }else{
+                    return true;
+                }
+
+            }
+        }
+
+        function checkEmail(email){
+            var pat = /^[a-zA-z0-9]+@[a-zA-z0-9]+(\.[a-zA-z0-9]+)+$/;
+
+            if( 'object' == typeof email){
+                //onblur
+                if(!pat.test(email.value)){
+                    $('#email_error_icon').removeClass('hidden'); 
+                }else{
+                    $('#email_error_icon').addClass('hidden');              
+                }
+            }else{
+                //submit
+                if(!pat.test(email)){
+                   return false;
+                }else{
+                    return true;
+                }
+
+            }
+        }
+
+
     </script>
 
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
