@@ -73,6 +73,15 @@
                         <button type="button" class="btn btn-info btn-lg btn-block" onclick="change('Sign In');">Sign In</button>
                     </form>
                 </div>
+
+                <div>
+                    <!-- 空行而已 -->
+                    <p></p>
+                </div>
+
+                <div class="alert alert-danger hidden" role="alert" id="errormsg">
+                    
+                </div>
             </div>
             <div class="col-md-4"></div>
         </div>
@@ -110,6 +119,49 @@
             var password = $('#password_up').val();
             var tel = $('#tel').val();
             var email = $('#email').val();
+
+            //警告信息隐藏
+            $('#errormsg').addClass('hidden');
+
+            if(checkAccount(account) && checkPassword(password) && checkTEL(tel) && checkEmail(email)){
+
+                var submitData = {
+                    'account': account,
+                    'password': password,
+                    'tel': tel,
+                    'email': email
+                };
+
+                $.ajax({
+                    url:'/users/reg',
+                    type:'POST',
+                    async:true,
+                    dataType:'json',
+                    data:submitData,
+                    success:function(result){
+
+                        if(result.success){
+
+                            //TODO
+                            // 提示成功
+                            alert(result.msg);
+                            // 跳转
+
+                        }else{
+                            $('#errormsg').html(result.msg);
+                            $('#errormsg').removeClass('hidden');
+                        }
+                    },
+                    error:function(error){
+                        $('#errormsg').html('系统异常，请稍后注册');
+                        $('#errormsg').removeClass('hidden');
+                    }
+                });
+
+            }else{
+                $('#errormsg').html('请检查填写表格是否存在x存在');
+                $('#errormsg').removeClass('hidden');
+            }
         }
     </script>
 

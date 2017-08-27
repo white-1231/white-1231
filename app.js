@@ -7,6 +7,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var ejs = require('ejs');
 
+//JS方法补充
+var supplement = require('./utils/supplement')
+
 // 加载路由控制
 var demo = require('./routes/demo');
 var users = require('./routes/users');
