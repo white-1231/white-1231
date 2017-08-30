@@ -14,6 +14,7 @@ var supplement = require('./utils/supplement')
 var demo = require('./routes/demo');
 var users = require('./routes/users');
 var login = require('./routes/login');
+var project = require('./routes/project')
 
 // 创建项目实例
 var app = express();
@@ -42,6 +43,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/',login);
 app.use('/users', users);
 app.use('/demo', demo);
+app.use('/project',project);
 
 // 404错误处理
 app.use(function(req, res, next) {
