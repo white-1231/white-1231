@@ -1,8 +1,10 @@
-@ -0,0 +1,215 @@
 <!DOCTYPE html>
 
-<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html lang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
@@ -12,8 +14,8 @@
     </title>
     <link rel='stylesheet' href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css' />
     <link rel='stylesheet' href='/stylesheets/dashboard.css' />
-    
-  </head>
+
+</head>
 
   <body>
 
@@ -33,7 +35,20 @@
             <li class="active"><a href="#">项目</a></li>
             <li><a href="#">日程</a></li>
             <li><a href="#">事项</a></li>
-            <li><a href="#">设置</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">设置
+                        <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                        <li><a href="#">个人主页</a></li>
+                        <li><a href="#">信息修改</a></li>
+                        <li><a href="#">聊天</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">添加项目</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">登出</a></li>
+                      </ul>
+            </li>
           </ul>
           <!-- <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Search...">
