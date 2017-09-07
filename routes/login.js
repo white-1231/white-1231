@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
   }else if(result == -1){
     res.render('login', { title: '首页' });
   }else if(result == -2){
-    userdb.getuser_byaccount(ownSession.user.account,function(ret){
+    userdb.getuser_byaccount(req.session.user.account,function(ret){
       if(!ret){
         res.render('login', { title: '首页' });
       }else{

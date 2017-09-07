@@ -142,3 +142,42 @@ exports.getuser_byaccount = function(account,callback){
         }
     });
 };
+
+/**
+ * 获取所有用户
+ */
+exports.get_alluser = function(order,offset,limit,callback){
+
+    callback = callback == null? noCallback:callback;
+
+    if(order == null || order == '' || order == undefined || (order !="asc"||order !="desc")){
+        order = 'ASC';
+    }
+
+    if(offset == null || offset == '' || offset == undefined ){
+        offset = 0;
+    }
+
+    if(limit == null || limit == '' || limit == undefined ){
+        limit = 10;
+    }
+
+    var sql = 'SELECT id,nickname,state,tel,email FROM t_usr ORDER BY state {0} LIMIT {1},{2} ';
+    sql =sql.format(order,parseInt(offset),parseInt(limit));
+    console.log(sql);
+
+    query(sql, function (err, rows, fields) {
+        if (err) {
+            throw err;
+        }
+        else {
+            if (rows.length > 0) {
+                callback(rows);
+            }
+            else {
+                callback(false);
+            }
+        }
+    });
+
+}

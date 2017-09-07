@@ -144,8 +144,60 @@
     <script>
         $(function () {
             userClick(); 
+            //初始化userTable
+            var utable = new Usertable();
+            utable.Init();
+
         });
-    
+
+        function Usertable(){
+            this.Init = function(){
+                $('#userList').bootstrapTable({
+                    url: '/manage/getAllUser',
+                    method:'post',
+                    toolbar: '#usertoolbar',            //工具按钮用哪个容器
+                    checkboxHeader: false,              //设置false 将在列头隐藏check-all checkbox .
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                      //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 20, 50],             //可供选择的每页的行数（*）
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    minimumCountColumns: 2,             //最少允许的列数
+                    clickToSelect: true,                //是否启用点击选中行
+                    height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                    columns: [ 
+                    {
+                        field: 'id',
+                        title: '用户编号'
+                    }, {
+                        field: 'nickname',
+                        title: '昵称',
+                    }, {
+                        field: 'state',
+                        title: '需求状态',
+                        formatter: function (data) {
+                            if (data == 0) {
+                                return "未激活";
+                            } else if(data == 1){
+                                return "正常";
+                            }
+                        }
+                    }, {
+                        field: 'tel',
+                        title: '联系方式'
+                    }, {
+                        field: 'email',
+                        title: '邮箱'
+                    },]
+                });
+            }
+        }
+
     </script>
 </body>
 
