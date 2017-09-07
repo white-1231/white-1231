@@ -27,9 +27,10 @@ var app = express();
 // 定义EJS模板引擎和模板文件位置
 app.set('views', path.join(__dirname, 'views'));
 app.engine('.html', ejs.__express);
-//将ejs文件改为html
-app.set('view engine', 'html');
-//app.set('view engine', 'ejs');
+
+app.set('view engine', 'ejs');
+// //将ejs文件改为html
+// app.set('view engine', 'html');
 
 // 定义icon图标
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
