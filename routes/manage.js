@@ -17,17 +17,27 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/getAllUser', function(req, res) {
-
   var queryData = req.body;
   var order = queryData.order;
   var offset = queryData.offset;
   var limit = queryData.limit;
 
-  userdb.get_alluser(order,offset,limit,function(ret){
-    if(ret){
-      return res.json({total:4,rows:8});
+  userdb.get_usertotal(function(count){
+
+    if(count == 0){
+      return res.json({total:count,rows:null});
     }
+
+    userdb.get_alluser(order,offset,limit,function(ret){
+      if(ret){
+        return res.json({total:count,rows:ret});
+      }
+    });
+
   });
+
+
+  
 });
 
 module.exports = router;

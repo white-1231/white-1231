@@ -181,3 +181,26 @@ exports.get_alluser = function(order,offset,limit,callback){
     });
 
 }
+
+/**
+ * 获取全部用户计数
+ */
+exports.get_usertotal = function(callback){
+
+    callback = callback == null? noCallback:callback;
+
+    //SELECT count(id) FROM mytk.t_usr;
+
+    var sql = 'SELECT count(id)as count FROM t_usr ';
+    console.log(sql);
+
+    query(sql, function (err, rows, fields) {
+        if (err) {
+            throw err;
+        }
+        else {
+            callback(rows[0].count);
+        }
+    });
+    
+}

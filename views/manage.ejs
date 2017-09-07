@@ -41,7 +41,7 @@
                 <div class="item-content item-user">
                     <h2 class="sub-header">管理用户</h2>
                     <div id="usertoolbar" class="btn-group">
-                        <button id="btn_add" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" data-whatever="111">
+                        <button id="btn_update" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>修改
                         </button>
                     </div>
@@ -54,35 +54,66 @@
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                       <span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">新增需求</h4>
+                                    <h4 class="modal-title" id="myModalLabel">修改用户信息</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-1"></div>
                                         <div class="col-md-10">
-                                            <form class="form-horizontal">
+                                            <form class="form-horizontal" id="userFrom">
                                                 <div class="form-group ">
-                                                    <label for="pjName" class="col-sm-2 control-label">项目ID</label>
+                                                    <label for="usrId" class="col-sm-2 control-label">帐号ID</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="pjName" placeholder="项目ID">
+                                                        <input type="text" class="form-control" id="usrId" placeholder="用户ID" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="pjName" class="col-sm-2 control-label">需求名称</label>
+                                                    <label for="userName" class="col-sm-2 control-label">帐号名称</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="pjName" placeholder="需求名称">
+                                                        <input type="text" class="form-control" id="userName" placeholder="用户名称">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="pjId" class="col-sm-2 control-label">需求编号</label>
+                                                    <label for="userState" class="col-sm-2 control-label">帐号状态</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="pjId" placeholder="项目编号" readonly>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="userState" id="userState" value="0"> 未激活
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="userState" id="userState" value="1"> 正常
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="userState" id="userState" value="2"> 停用
+                                                        </label>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="pjDesc" class="col-sm-2 control-label">项目描述</label>
+                                                    <label for="userTel" class="col-sm-2 control-label">TEL</label>
                                                     <div class="col-sm-8">
-                                                        <textarea class="form-control" rows="5" id="pjDesc" placeholder="项目描述"></textarea>
+                                                        <input type="text" class="form-control" id="userTel" placeholder="TEL">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="userEmail" class="col-sm-2 control-label">EMAIL</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="userEmail" placeholder="EMAIL">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="permission" class="col-sm-2 control-label">授权</label>
+                                                    <div class="col-sm-8">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" name="permission" id="permission" value="2"> 管理
+                                                        </label>
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" name="permission" id="permission" value="3"> 开发
+                                                        </label>
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" name="permission" id="permission" value="4"> 测试
+                                                        </label>
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" name="permission" id="permission" value="5"> 产品
+                                                        </label>
                                                     </div>
                                                 </div>
                                             </form>
@@ -147,7 +178,6 @@
             //初始化userTable
             var utable = new Usertable();
             utable.Init();
-
         });
 
         function Usertable(){
@@ -168,35 +198,61 @@
                     showRefresh: true,                  //是否显示刷新按钮
                     minimumCountColumns: 2,             //最少允许的列数
                     clickToSelect: true,                //是否启用点击选中行
+                    singleSelect:true,                  //只能选中一行
                     height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
                     uniqueId: "id",                     //每一行的唯一标识，一般为主键列
-                    columns: [ 
-                    {
-                        field: 'id',
-                        title: '用户编号'
-                    }, {
-                        field: 'nickname',
-                        title: '昵称',
-                    }, {
-                        field: 'state',
-                        title: '需求状态',
-                        formatter: function (data) {
-                            if (data == 0) {
-                                return "未激活";
-                            } else if(data == 1){
-                                return "正常";
-                            }
-                        }
-                    }, {
-                        field: 'tel',
-                        title: '联系方式'
-                    }, {
-                        field: 'email',
-                        title: '邮箱'
-                    },]
+                    columns: [
+                            {
+                                checkbox: true
+                            },
+                            {
+                                field: 'id',
+                                title: '用户编号'
+                            }, {
+                                field: 'nickname',
+                                title: '昵称',
+                            }, {
+                                field: 'state',
+                                title: '需求状态',
+                                formatter: function (data) {
+                                    if (data == 0) {
+                                        return "未激活";
+                                    } else if (data == 1) {
+                                        return "正常";
+                                    }
+                                }
+                            }, {
+                                field: 'tel',
+                                title: '联系方式'
+                            }, {
+                                field: 'email',
+                                title: '邮箱'
+                            }]
                 });
             }
         }
+
+    </script>
+
+    <script>
+        //模态框赋值
+        $('#myModal').on('show.bs.modal', function (event) {
+            var $utable = $('#userList');
+            var selectData = $utable.bootstrapTable('getSelections');   
+            var modal = $(this);
+            document.getElementById('userFrom').reset();
+            if(selectData[0].id != null){
+                //个人信息赋值
+                modal.find('#usrId').val(selectData[0].id);
+                modal.find('#userName').val(selectData[0].nickname);
+                modal.find('#userTel').val(selectData[0].tel);
+                modal.find('#userEmail').val(selectData[0].email);
+                modal.find('input[name="userState"]').get(selectData[0].state).checked=true;  
+                //TODO 权限
+            }
+           
+            })
+   
 
     </script>
 </body>
