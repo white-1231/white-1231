@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/dashboard.css' />
+    <!-- table -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+
+    <style>
+        .item-content {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <% include nav.html %>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="nav-item user-nav"><a href="#" onclick='userClick();return false;'>管理用户 </a></li>
+                    <li class="nav-item project-nav"><a href="#" onclick='projectClick();return false;'>管理项目</a></li>
+                    <li class="nav-item system-nav"><a href="#" onclick='systemClick();return false;'>维护系统</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <div class="item-content item-user">
+                    <h2 class="sub-header">管理用户</h2>
+                    <div id="usertoolbar" class="btn-group">
+                        <button id="btn_add" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" data-whatever="111">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>修改
+                        </button>
+                    </div>
+
+                    <table id="userList"></table>
+                        
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">新增需求</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10">
+                                            <form class="form-horizontal">
+                                                <div class="form-group ">
+                                                    <label for="pjName" class="col-sm-2 control-label">项目ID</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="pjName" placeholder="项目ID">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="pjName" class="col-sm-2 control-label">需求名称</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="pjName" placeholder="需求名称">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="pjId" class="col-sm-2 control-label">需求编号</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="pjId" placeholder="项目编号" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="pjDesc" class="col-sm-2 control-label">项目描述</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control" rows="5" id="pjDesc" placeholder="项目描述"></textarea>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-1">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary">提交</button>
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="item-content item-project">
+                    <h2 class="sub-header">管理项目</h2>
+                </div>
+
+                <div class="item-content item-system">
+                    <h2 class="sub-header">系统维护</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- table -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+
+    <script>
+        //界面显示控制
+        function userClick() {
+            $(".nav-item").removeClass('active');
+            $(".user-nav").addClass('active');
+            $('.item-content').hide();
+            $('.item-user').show();
+        }
+        function projectClick() {
+            $(".nav-item").removeClass('active');
+            $(".project-nav").addClass('active');
+            $('.item-content').hide();
+            $('.item-project').show();
+        }
+        function systemClick() {
+            $(".nav-item").removeClass('active');
+            $(".system-nav").addClass('active');
+            $('.item-content').hide();
+            $('.item-system').show();
+        }
+    </script>
+
+    <script>
+        $(function () {
+            userClick(); 
+        });
+    
+    </script>
+</body>
+
+</html>

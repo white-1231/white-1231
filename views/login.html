@@ -37,7 +37,7 @@
                             <input class="form-control" type="text" id="account_in" placeholder="ACCOUNT" />
                         </div>
                         <div class="form-group">
-                            <input class="form-control" type="password" id="password_in" placeholder="PASSWORD" />
+                            <input class="form-control" type="password" id="password_in" placeholder="PASSWORD"/>                           
                         </div>
                         <button type="button" class="btn btn-primary btn-lg btn-block" onclick="signIn();">Sign In</button>
                         <button type="button" class="btn btn-info btn-lg btn-block" onclick="change('Sign Up');">Sign Up</button>
@@ -47,7 +47,7 @@
                     <form class="form-horizontal" action="" method="post" onsubmit="return false;" id="form_up">
                         <div class="form-group has-feedback">
                             <input class="form-control" type="text" id="account_up" placeholder="ACCOUNT" onblur="checkAccount(this);" />
-                            <div class="hidden" id="account_error_icon">
+                            <div class="hidden account_error_icon" >
                                 <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                             </div>
                         </div>
@@ -110,6 +110,8 @@
                 document.getElementById('form_in').reset();
             }
 
+            //警告信息隐藏
+            $('#errormsg').addClass('hidden');
         }
 
     </script>
@@ -142,11 +144,8 @@
                     success:function(result){
 
                         if(result.success){
-
-                            //TODO
-                            // 提示成功
-                            alert(result.msg);
                             // 跳转
+                            window.location.href = "/home";
 
                         }else{
                             $('#errormsg').html(result.msg);
@@ -168,7 +167,41 @@
 
     <script>
         function signIn() {
-            alert('sign in');
+            var account = $('#account_in').val();
+            var password = $('#password_in').val();
+
+            if(checkNotNull(account)&& checkNotNull(password)){
+                var submitData = {
+                    'account': account,
+                    'password': password
+                };
+                $.ajax({
+                    url:'/signIn',
+                    type:'POST',
+                    async:true,
+                    dataType:'json',
+                    data:submitData,
+                    success:function(result){
+
+                        if(result.success){
+                            //TODO
+                            window.location.href = "/home";
+                            // 跳转
+                        }else{
+                            $('#errormsg').html(result.msg);
+                            $('#errormsg').removeClass('hidden');
+                        }
+                    },
+                    error:function(error){
+                        $('#errormsg').html('系统异常，请稍后登录');
+                        $('#errormsg').removeClass('hidden');
+                    }
+                });
+
+            }else{
+                $('#errormsg').html("密码或账号不得为空");
+                $('#errormsg').removeClass('hidden');
+            }
         }
     </script>
 
@@ -179,9 +212,9 @@
             if( 'object' == typeof account){
                 //onblur
                 if(!pat.test(account.value)){
-                    $('#account_error_icon').removeClass('hidden');                    
+                    $('.account_error_icon').removeClass('hidden');                    
                 }else{
-                    $('#account_error_icon').addClass('hidden');                 
+                    $('.account_error_icon').addClass('hidden');                 
                 }
             }else{
                 //submit
@@ -257,7 +290,13 @@
             }
         }
 
-
+        function checkNotNull(data){
+           if( data === null || data === undefined || data === ''){
+               return false;
+           }else{
+               return true;
+           }
+        }
     </script>
 
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>

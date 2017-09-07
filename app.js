@@ -5,6 +5,9 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
+var session = require('express-session');
+
 var ejs = require('ejs');
 
 //JS方法补充
@@ -16,6 +19,7 @@ var users = require('./routes/users');
 var login = require('./routes/login');
 var project = require('./routes/project')
 var home = require('./routes/home');
+var manage = require('./routes/manage');
 
 // 创建项目实例
 var app = express();
@@ -37,6 +41,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // 定义cookie解析器
 app.use(cookieParser());
+//定义session解析器
+app.use(session({
+  secret:'123456',
+  cookie:{maxAge:60*1000*30},
+  resave:false,
+  saveUninitialized:false
+}));
+
 // 定义静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -46,6 +58,8 @@ app.use('/users', users);
 app.use('/demo', demo);
 app.use('/project',project);
 app.use('/home',home);
+app.use('/manage',manage);
+
 
 // 404错误处理
 app.use(function(req, res, next) {

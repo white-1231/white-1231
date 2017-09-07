@@ -111,3 +111,34 @@ exports.is_account_exist = function (account, callback) {
     });
 
 };
+
+/**
+ * 通过账号获取用户实体
+ */
+exports.getuser_byaccount = function(account,callback){
+    callback = callback == null ? noCallback : callback;
+
+    if (account == null) {
+        callback(false);
+        return;
+    }
+
+    var sql = 'SELECT * FROM t_usr WHERE account = "{0}"';
+    sql = sql.format(String(account));
+
+    console.log(sql);
+
+    query(sql, function (err, rows, fields) {
+        if (err) {
+            throw err;
+        }
+        else {
+            if (rows.length > 0) {
+                callback(rows);
+            }
+            else {
+                callback(false);
+            }
+        }
+    });
+};

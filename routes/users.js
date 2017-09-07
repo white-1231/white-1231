@@ -1,11 +1,19 @@
 var express = require('express');
 
 var userdb = require('../models/user/userdb');
+var crypto = require('../utils/cryptoUtils');
+var sessionUtils = require('../utils/sessionUtils');
 
 var router = express.Router();
 
-router.get('/', function(req, res, next) {
-  res.send('闯入未知区域');
+router.get('/', function (req, res, next) {
+  var result = sessionUtils.checkUsefulSession(req.session);
+
+  if (result == 1) {
+    res.render('home', { title: '个人' });
+  } else {
+    res.render('login', { title: '首页' })
+  }
 });
 
 /**
@@ -35,6 +43,17 @@ router.post('/reg', function (req, res) {
     if(!ret){
       userdb.create_account($account,$password,$tel,$email,function(ret){
         if(ret){
+
+          var newuser = {
+            id:-1,
+            account:$account,
+            tel:$tel,
+            email:$email
+          }
+
+          req.session.user = newuser;
+          req.session.sign = true;
+
           return res.json({success:true,msg:'success'});
         }else{
           return res.json({success:false,msg:'db operate error'});
