@@ -170,6 +170,9 @@
             var account = $('#account_in').val();
             var password = $('#password_in').val();
 
+            //警告信息隐藏
+            $('#errormsg').addClass('hidden');
+
             if(checkNotNull(account)&& checkNotNull(password)){
                 var submitData = {
                     'account': account,

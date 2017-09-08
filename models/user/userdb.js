@@ -1,16 +1,10 @@
-var  mysql = require('mysql');
+//引用
 var  crypto = require('../../utils/cryptoUtils');
-
-/**
- * 池对象
- */
-var pool = null;
+var  mysqlpool = require('../../utils/mysqlPool');
 
 function query(sql,callback){
 
-    if(pool == null){
-        init();
-    }
+    var pool = mysqlpool.getPool();
 
     pool.getConnection(function(err,conn){  
         if(err){  
@@ -29,19 +23,6 @@ function query(sql,callback){
 function noCallback(a,b,c,d,e,f,g){
     console.log('has no callback!');
 }
-
-/**
- * 初始化数据库
- */
-function init(){
-    pool = mysql.createPool({  
-        host: '127.0.0.1',
-        user: 'root',
-        password: '123456',
-        database: 'mytk',
-        port: 3306
-    });
-};
 
 /**
  * 创建账号
@@ -72,9 +53,6 @@ exports.create_account = function(account,password,tel,email,callback){
             callback(true);            
         }
     });
-
-
-
 
 };
 
@@ -189,8 +167,6 @@ exports.get_usertotal = function(callback){
 
     callback = callback == null? noCallback:callback;
 
-    //SELECT count(id) FROM mytk.t_usr;
-
     var sql = 'SELECT count(id)as count FROM t_usr ';
     console.log(sql);
 
@@ -200,6 +176,33 @@ exports.get_usertotal = function(callback){
         }
         else {
             callback(rows[0].count);
+        }
+    });
+    
+}
+
+/**
+ * 更新个人信息
+ */
+exports.update_UserByID = function (id,tel,email,state,nickname,callback){
+    callback = callback == null ? noCallback : callback;
+
+    if (id == null || id == undefined || id == '') {
+        callback(false);
+        return;
+    }
+
+    var sql ='UPDATE t_usr SET tel="{0}", email="{1}", state={2}, nickname="{3}" WHERE id={4}';
+    sql =sql.format(tel,email,state,nickname,id);
+    console.log(sql);
+
+    query(sql, function(err, rows, fields) {
+        if (err) {
+            callback(false);
+            throw err; 
+        }
+        else{
+            callback(true);            
         }
     });
     

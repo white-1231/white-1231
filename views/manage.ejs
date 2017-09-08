@@ -87,16 +87,22 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group has-feedback">
                                                     <label for="userTel" class="col-sm-2 control-label">TEL</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="userTel" placeholder="TEL">
+                                                        <input type="text" class="form-control" id="userTel" placeholder="TEL" onblur="checkTEL(this);">
+                                                        <div class="hidden" id="tel_error_icon">
+                                                            <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group has-feedback">
                                                     <label for="userEmail" class="col-sm-2 control-label">EMAIL</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="userEmail" placeholder="EMAIL">
+                                                        <input type="text" class="form-control" id="userEmail" placeholder="EMAIL" onblur="checkEmail(this);">
+                                                        <div class="hidden" id="email_error_icon">
+                                                            <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -117,15 +123,20 @@
                                                     </div>
                                                 </div>
                                             </form>
+
+                                            <div class="alert alert-danger hidden" role="alert" id="errormsg">
+                                                   
+                                            </div>
                                         </div>
                                         <div class="col-md-1">
 
                                         </div>
 
+                                        
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">提交</button>
+                                    <button type="button" class="btn btn-primary" onclick="commitUpdate();">提交</button>
                                   <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                                 </div>
                             </div>
@@ -219,6 +230,8 @@
                                         return "未激活";
                                     } else if (data == 1) {
                                         return "正常";
+                                    } else if(data == 2 ){
+                                        return "停用";
                                     }
                                 }
                             }, {
@@ -238,22 +251,174 @@
         //模态框赋值
         $('#myModal').on('show.bs.modal', function (event) {
             var $utable = $('#userList');
-            var selectData = $utable.bootstrapTable('getSelections');   
+            var selectData = $utable.bootstrapTable('getSelections');
             var modal = $(this);
+
+            //表单重置
             document.getElementById('userFrom').reset();
-            if(selectData[0].id != null){
+            //警告信息隐藏
+            $('#errormsg').addClass('hidden');
+            $('#tel_error_icon').addClass('hidden');     
+            $('#email_error_icon').addClass('hidden');    
+
+            if (selectData[0].id != null) {
                 //个人信息赋值
                 modal.find('#usrId').val(selectData[0].id);
                 modal.find('#userName').val(selectData[0].nickname);
                 modal.find('#userTel').val(selectData[0].tel);
                 modal.find('#userEmail').val(selectData[0].email);
-                modal.find('input[name="userState"]').get(selectData[0].state).checked=true;  
-                //TODO 权限
+                modal.find('input[name="userState"]').get(selectData[0].state).checked = true;
+                //获取权限
+                $.get("/manage/getpermission?uid="+selectData[0].id, function (result) {
+                    var permission = result.data;
+                    //本地备份
+                    localpms = result.data;
+                    //赋值
+                    for(var i =0 ;i<permission.length;i++){
+                        if(permission[i] == 1){
+                            $("input:checkbox[value='"+i+"']").attr('checked',true);
+                        }else{
+                            $("input:checkbox[value='"+i+"']").attr('checked',false);
+                        }
+                    }
+                });
             }
-           
-            })
-   
+        });
 
+        function checkTEL(tel){
+            var pat = /^(13[0-9]|14[5|7]|15\d|18\d)\d{8}$/;
+
+            if( 'object' == typeof tel){
+                //onblur
+                if(!pat.test(tel.value)){
+                    $('#tel_error_icon').removeClass('hidden');    
+                }else{
+                    $('#tel_error_icon').addClass('hidden');               
+                }
+            }else{
+                //submit
+                if(!pat.test(tel)){
+                   return false;
+                }else{
+                    return true;
+                }
+
+            }
+        }
+
+        function checkEmail(email){
+            var pat = /^[a-zA-z0-9]+@[a-zA-z0-9]+(\.[a-zA-z0-9]+)+$/;
+
+            if( 'object' == typeof email){
+                //onblur
+                if(!pat.test(email.value)){
+                    $('#email_error_icon').removeClass('hidden'); 
+                }else{
+                    $('#email_error_icon').addClass('hidden');              
+                }
+            }else{
+                //submit
+                if(!pat.test(email)){
+                   return false;
+                }else{
+                    return true;
+                }
+
+            }
+        }
+
+        function commitUpdate(){
+            //警告信息隐藏
+            $('#errormsg').addClass('hidden');
+
+            var usrId = $('#usrId').val();
+            var userName = $('#userName').val();
+            var userTel = $('#userTel').val();
+            var userEmail = $('#userEmail').val();
+            var userState = $("input[name='userState']:checked").val();
+            //checkbox 获取值
+            var permission = [0,0,0,0,0,0]; 
+            $("input[name='permission']:checked").each(function(){
+                permission[parseInt($(this).val())] = 1;
+            });
+            
+            var commitpms = checkPermision(permission);
+
+            if(checkTEL(userTel) && checkEmail(userEmail)){
+
+                var submitData = {
+                    'id': usrId,
+                    'nickname': userName,
+                    'tel': userTel,
+                    'email': userEmail,
+                    'state': userState,
+                    'permission':JSON.stringify(commitpms) 
+                };
+
+                $.ajax({
+                    url:'/manage/userUpdate',
+                    type:'POST',
+                    async:true,
+                    dataType:'json',
+                    data:submitData,
+                    success:function(result){
+
+                        if(result.success){
+                            //关闭窗口
+                            $('#myModal').modal('hide');
+                            //刷新列表
+                            $("#userList").bootstrapTable('refresh');
+
+                        }else{
+                            $('#errormsg').html(result.msg);
+                            $('#errormsg').removeClass('hidden');
+                        }
+                    },
+                    error:function(error){
+                        $('#errormsg').html('系统异常，请稍后注册');
+                        $('#errormsg').removeClass('hidden');
+                    }
+                });
+
+            }else{
+                $('#errormsg').html('请检查填写表格是否存在x存在');
+                $('#errormsg').removeClass('hidden');
+            }
+        }
+
+        //待修改用户原权限本地备份
+        var localpms = null;
+        //确定修改的权限
+        function checkPermision(pmsArr){
+            var del =[];
+            var add =[];
+            for(var i=0 ; i<pmsArr.length;i++){
+                var newObj = pmsArr[i];
+                var oldObj = localpms[i];
+
+                //0,1 不判断
+                if(i ==0 ||i == 1){
+                    continue;
+                }
+
+                if( newObj == oldObj){
+
+                }else{
+                    if(newObj >oldObj){
+                        add.push(i);
+                    }else{
+                        del.push(i);
+                    }
+                }
+            }
+
+            var permission ={
+                del:del,
+                add:add
+            }
+
+            return permission;
+        }
     </script>
 </body>
 

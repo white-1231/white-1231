@@ -3,7 +3,9 @@ var debug = require('debug')('mytk:index');
 
 var crypto = require('../utils/cryptoUtils');
 var sessionUtils = require('../utils/sessionUtils');
+
 var userdb = require('../models/user/userdb');
+var permissiondb = require('../models/permission/permissiondb');
 
 var router = express.Router();
 
@@ -24,7 +26,22 @@ router.get('/', function(req, res, next) {
         delete user.password;
         req.session.user = user;
         req.session.sign = true;
-        res.render('home', { title: '主页' });  
+
+        //权限查询
+        permissiondb.get_by_id(user.id,function(data){
+          var permission = [0,0,0,0,0,0];;
+          if(data == -1 || data == 0){
+            //无权限，不操作
+          }else {
+            for(var i = 0 ;i <data.length ; i++){
+              var temp = data[i];
+              permission[parseInt(temp.pid)] = 1;
+            }
+          }
+          req.session.permission = permission;
+
+          res.render('home', { title: '主页' });
+        }); 
       }
     });
   }
@@ -45,19 +62,34 @@ router.post('/signIn',function(req,res){
 
   userdb.getuser_byaccount($account,function(ret){
     if(!ret){
-      return res.json({success:false,msg:'该账号已存在'});
+      return res.json({success:false,msg:'帐号密码不匹配'});
     }else{
       var user = ret[0];
       var pwd = crypto.md5($password);
+
       if(pwd == user.password){
 
         delete user.password;
         req.session.user = user;
         req.session.sign = true;
 
-        return res.json({success:true,msg:'success'});
+        //权限查询
+        permissiondb.get_by_id(user.id,function(data){
+          var permission = [0,0,0,0,0,0];;
+          if(data == -1 || data == 0){
+            //无权限，不操作
+          }else {
+            for(var i = 0 ;i <data.length ; i++){
+              var temp = data[i];
+              permission[parseInt(temp.pid)] = 1;
+            }
+          }
+          req.session.permission = permission;
+
+          return res.json({success:true,msg:'success'});
+        });
       }else{
-        return res.json({success:false,msg:'该账号已存在'});
+        return res.json({success:false,msg:'帐号密码不匹配'});
       }
     }
   });
