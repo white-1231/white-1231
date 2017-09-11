@@ -2,6 +2,7 @@
 var express = require('express');
 
 var sessionUtils = require('../utils/sessionUtils');
+var permissiondb = require('../models/permission/permissiondb');
 
 var router = express.Router();
 
@@ -18,7 +19,13 @@ router.get('/add', function (req, res, next) {
   var result = sessionUtils.checkUsefulSession(req.session);
 
   if (result == 1) {
-    res.render('addProject', { title: '添加项目' });
+    permissiondb.get_user_pms(function(data){
+
+      console.log(data);
+
+      res.render('addProject', { title: '添加项目' });
+
+    })
   } else {
     res.render('login', { title: '首页' })
   }

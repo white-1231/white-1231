@@ -56,6 +56,9 @@ exports.get_by_id = function (uid, callback) {
     })
 }
 
+/**
+ * 添加权限
+ */
 exports.add_pms = function (uid, pid, callback) {
     callback = callback == null ? noCallback : callback;
 
@@ -92,6 +95,9 @@ exports.add_pms = function (uid, pid, callback) {
     });
 }
 
+/**
+ * 删除权限
+ */
 exports.del_pms = function(uid,pid,callback){
     callback = callback == null ? noCallback : callback;
 
@@ -117,6 +123,27 @@ exports.del_pms = function(uid,pid,callback){
         }
         else {
             callback(true);
+        }
+    });
+}
+
+/**
+ * 获取全部用户权限分组，会造成笛卡尔积
+ */
+exports.get_user_pms = function (callback) {
+    callback = callback == null ? noCallback : callback;
+
+    var sql = 'select t.id,t.nickname,p.pid from t_usr t,t_usr_permission p where t.id = p.uid and t.state =1 and p.pid >1 order by pid';
+
+    console.log(sql);
+
+    query(sql, function (err, rows, fields) {
+        if (err) {
+            callback(false);
+            throw err;
+        }
+        else {
+            callback(rows);
         }
     });
 }
