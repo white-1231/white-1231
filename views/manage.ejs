@@ -254,6 +254,9 @@
             var selectData = $utable.bootstrapTable('getSelections');
             var modal = $(this);
 
+            var flag = selectData == '';
+            alert(flag);
+
             //表单重置
             document.getElementById('userFrom').reset();
             //警告信息隐藏
@@ -261,7 +264,7 @@
             $('#tel_error_icon').addClass('hidden');     
             $('#email_error_icon').addClass('hidden');    
 
-            if (selectData[0].id != null) {
+            if ((!flag) && selectData[0].id != null) {
                 //个人信息赋值
                 modal.find('#usrId').val(selectData[0].id);
                 modal.find('#userName').val(selectData[0].nickname);
@@ -282,6 +285,8 @@
                         }
                     }
                 });
+            }else{
+                return false;
             }
         });
 

@@ -59,7 +59,6 @@ router.post('/userUpdate',function(req,res){
   var $state = submitData.state;
   var $permission = submitData.permission;
 
-  console.log($permission);
   $permission =JSON.parse($permission);
 
   if (!/^(13[0-9]|14[5|7]|15\d|18\d)\d{8}$/.test($tel)) {

@@ -40,6 +40,11 @@
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <div class="hidden-data hidden">
+                    <input type="hidden" id="hasPID" value=''>
+                    <input type="hidden" id="hasPNAME"  value=''>
+                </div>
+
                 <div class="item-content item-project">
                     <h2 class="sub-header">项目信息</h2>
                     <div class="row ">
@@ -59,70 +64,62 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="pjDesc" class="col-sm-2 control-label">项目成员</label>
+                                    <label  class="col-sm-2 control-label">项目成员</label>
                                     <div class="col-sm-8 row">
                                         <div class="col-xs-4">
                                             <button type="button" class="btn btn-default btn-block " disabled><b>PM</b></button>
                                         </div>
                                         <div class="col-xs-8">
-                                            <select id="usertype" title="请选择项目负责人" name="usertype" class="selectpicker show-tick form-control" data-live-search="false">
-                                                        <option>1</option>
-                                                        <option>2</option>
-                                                        <option>3</option>
-                                                        <option>4</option>
-                                                        <option>5</option>
-                                                      </select>
+                                            <select id="pm_member" title="请选择项目负责人" name="usertype" class="selectpicker show-tick form-control" data-live-search="false">
+                                                <% for (var i=0; i<group.pm.length; i++) { %>
+                                                    <option value="<%=group.pm[i].id %>" > <%=group.pm[i].nickname %></option>    
+                                                <% } %>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="pjDesc" class="col-sm-2 control-label"></label>
+                                    <label  class="col-sm-2 control-label"></label>
                                     <div class="col-sm-8 row">
                                         <div class="col-xs-4">
                                             <button type="button" class="btn btn-default btn-block" disabled><b>DE</b></button>
                                         </div>
                                         <div class="col-xs-8">
-                                            <select id="usertype" title="请选择开发人员" name="usertype" class="selectpicker show-tick form-control" multiple data-live-search="false">
-                                                            <option>1</option>
-                                                            <option>2</option>
-                                                            <option>3</option>
-                                                            <option>4</option>
-                                                            <option>5</option>
-                                                          </select>
+                                            <select id="de_member" title="请选择开发人员" name="usertype" class="selectpicker show-tick form-control" multiple data-live-search="false">
+                                                <% for (var i=0; i<group.de.length; i++) { %>
+                                                    <option value="<%=group.de[i].id %>" > <%=group.de[i].nickname %></option>    
+                                                <% } %>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="pjDesc" class="col-sm-2 control-label"></label>
+                                    <label  class="col-sm-2 control-label"></label>
                                     <div class="col-sm-8 row">
                                         <div class="col-xs-4">
                                             <button type="button" class="btn btn-default btn-block" disabled><b>TE</b></button>
                                         </div>
                                         <div class="col-xs-8">
-                                            <select id="usertype" title="请选择测试人员" name="usertype" class="selectpicker show-tick form-control" multiple data-live-search="false">
-                                                                <option>1</option>
-                                                                <option>2</option>
-                                                                <option>3</option>
-                                                                <option>4</option>
-                                                                <option>5</option>
-                                                              </select>
+                                            <select id="te_member" title="请选择测试人员" name="usertype" class="selectpicker show-tick form-control" multiple data-live-search="false">
+                                                <% for (var i=0; i<group.te.length; i++) { %>
+                                                    <option value="<%=group.te[i].id %>" > <%=group.te[i].nickname %></option>    
+                                                <% } %>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="pjDesc" class="col-sm-2 control-label"></label>
+                                    <label class="col-sm-2 control-label"></label>
                                     <div class="col-sm-8 row">
                                         <div class="col-xs-4">
                                             <button type="button" class="btn btn-default btn-block" disabled><b>DA</b></button>
                                         </div>
                                         <div class="col-xs-8">
-                                            <select id="usertype" title="请选择需求人员" name="usertype" class="selectpicker show-tick form-control" multiple data-live-search="false">
-                                                                    <option>1</option>
-                                                                    <option>2</option>
-                                                                    <option>3</option>
-                                                                    <option>4</option>
-                                                                    <option>5</option>
-                                                                  </select>
+                                            <select id="da_member" title="请选择需求人员" name="usertype" class="selectpicker show-tick form-control" multiple data-live-search="false">
+                                                <% for (var i=0; i<group.da.length; i++) { %>
+                                                    <option value="<%=group.da[i].id %>" > <%=group.da[i].nickname %></option>    
+                                                <% } %>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -136,10 +133,10 @@
                                     <label class="col-sm-2 control-label"></label>
                                     <div class="col-sm-8 row">
                                         <div class=" col-xs-6">
-                                            <input class="btn btn-success btn-block" type="submit" value="提交">
+                                            <button type="button" class="btn btn-success btn-block" onclick="addProject();">提交</button>
                                         </div>
                                         <div class="col-xs-6">
-                                            <input class="btn btn-warning btn-block" type="reset" value="重置">
+                                            <input id="pfrom_reset" class="btn btn-warning btn-block" type="reset" onclick="cleanSelect();true;" value="重置">
                                         </div>
                                     </div>
                                 </div>
@@ -151,61 +148,60 @@
                 
                 <div class="item-content item-demand">
                     <h2 class="sub-header">需求列表</h2>
-                    <div id="toolbar" class="btn-group">
-                        <button id="btn_add" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" data-whatever="111">
+                    <div id="dmtoolbar" class="btn-group">
+                        <button id="btn_add" type="button" class="btn btn-default" data-toggle="modal" data-target="#demandModal">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
                         </button>
                     </div>
-                    <table id="tb_departments"></table>
+                    <table id="demandList"></table>
 
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal fade" id="demandModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                      <span aria-hidden="true">&times;</span></button>
+                                    <span aria-hidden="true">&times;</span></button>
                                     <h4 class="modal-title" id="myModalLabel">新增需求</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-1"></div>
                                         <div class="col-md-10">
-                                            <form class="form-horizontal">
+                                            <form class="form-horizontal" id="demandFrom">
                                                 <div class="form-group ">
-                                                    <label for="pjName" class="col-sm-2 control-label">项目ID</label>
+                                                    <label for="d4pjID" class="col-sm-2 control-label">所属项目</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="pjName" placeholder="项目ID">
+                                                        <input type="text" class="form-control" id="d4pjName" placeholder="项目名称">
+                                                        <input type="hidden" class="form-control" id="d4pjID" placeholder="项目ID">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="pjName" class="col-sm-2 control-label">需求名称</label>
+                                                    <label for="dmName" class="col-sm-2 control-label">需求名称</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="pjName" placeholder="需求名称">
+                                                        <input type="text" class="form-control" id="dmName" placeholder="需求名称">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="pjId" class="col-sm-2 control-label">需求编号</label>
+                                                    <label for="dmID" class="col-sm-2 control-label">需求编号</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="pjId" placeholder="项目编号" readonly>
+                                                        <input type="text" class="form-control" id="dmID" placeholder="项目编号" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="pjDesc" class="col-sm-2 control-label">项目描述</label>
+                                                    <label for="dmDesc" class="col-sm-2 control-label">项目描述</label>
                                                     <div class="col-sm-8">
-                                                        <textarea class="form-control" rows="5" id="pjDesc" placeholder="项目描述"></textarea>
+                                                        <textarea class="form-control" rows="5" id="dmDesc" placeholder="项目描述"></textarea>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
                                         <div class="col-md-1">
-
                                         </div>
-
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">提交</button>
-                                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" onclick="addDemand();">提交</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                                 </div>
                             </div>
                         </div>
@@ -214,12 +210,12 @@
 
                 <div class="item-content item-version">
                     <h2 class="sub-header">版本列表</h2>
-                    <div id="toolbar2" class="btn-group">
+                    <div id="versiontoolbar" class="btn-group">
                         <button id="btn_add" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal1" data-whatever="111">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
                             </button>
                     </div>
-                    <table id="tb_departments2"></table>
+                    <table id="versionList"></table>
 
                     <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                             <div class="modal-dialog modal-lg" role="document">
@@ -294,120 +290,30 @@
 
     <script>
         $(function () {
-                //1.初始化Table
-                var oTable1 = new TableInit1();
-                oTable1.Init();
-
-                var oTable2 = new TableInit2();
-                oTable2.Init();
-
-                projectClick();  
+            projectClick();  
         });
-
-            var TableInit1 = function () {
-                var oTableInit = new Object();
-                //初始化Table
-                oTableInit.Init = function () {
-                    $('#tb_departments').bootstrapTable({
-                        toolbar: '#toolbar',                //工具按钮用哪个容器
-                        checkboxHeader:false,
-                        striped: true,                      //是否显示行间隔色
-                        cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-                        pagination: true,                   //是否显示分页（*）
-                        sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                        pageNumber: 1,                      //初始化加载第一页，默认第一页
-                        pageSize: 10,                       //每页的记录行数（*）
-                        pageList: [10, 20, 50],             //可供选择的每页的行数（*）
-                        showColumns: true,                  //是否显示所有的列
-                        showRefresh: true,                  //是否显示刷新按钮
-                        minimumCountColumns: 2,             //最少允许的列数
-                        clickToSelect: true,                //是否启用点击选中行
-                        height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-                        uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
-                        columns: [{
-                                checkbox: true
-                            }, {
-                                field: 'id',
-                                title: '需求编号'
-                            }, {
-                                field: 'name',
-                                title: '需求名称'
-                            }, {
-                                field: 'status',
-                                title: '需求状态',
-                                formatter:function(data){
-                                    if(data == 1){
-                                        return "进行中";
-                                    }else{
-                                        return "停止";
-                                    }
-                                }
-                            }, {
-                                field: 'Desc',
-                                title: '描述'
-                            },]
-                    });
-                };
-                return oTableInit;
-            };
-
-            var TableInit2 = function () {
-                var oTableInit = new Object();
-                //初始化Table
-                oTableInit.Init = function () {
-                    $('#tb_departments2').bootstrapTable({
-                        toolbar: '#toolbar2',                //工具按钮用哪个容器
-                        checkboxHeader:false,
-                        striped: true,                      //是否显示行间隔色
-                        cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-                        pagination: true,                   //是否显示分页（*）
-                        sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                        pageNumber: 1,                      //初始化加载第一页，默认第一页
-                        pageSize: 10,                       //每页的记录行数（*）
-                        pageList: [10, 20, 50],             //可供选择的每页的行数（*）
-                        showColumns: true,                  //是否显示所有的列
-                        showRefresh: true,                  //是否显示刷新按钮
-                        minimumCountColumns: 2,             //最少允许的列数
-                        clickToSelect: true,                //是否启用点击选中行
-                        height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-                        uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
-                        columns: [{
-                                checkbox: true
-                            }, {
-                                field: 'id',
-                                title: '需求编号'
-                            }, {
-                                field: 'name',
-                                title: '需求名称'
-                            }, {
-                                field: 'status',
-                                title: '需求状态',
-                                formatter:function(data){
-                                    if(data == 1){
-                                        return "进行中";
-                                    }else{
-                                        return "停止";
-                                    }
-                                }
-                            }, {
-                                field: 'Desc',
-                                title: '描述'
-                            },]
-                    });
-                };
-                return oTableInit;
-            };
 
     </script>
 
     <script>
         //模态框赋值
-        $('#myModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget) ;
-                var recipient = button.data('whatever') ;
+        $('#demandModal').on('show.bs.modal', function (event) {
+            var pid = $('#hasPID').val();
+            var pname = $('#hasPNAME').val();
+
+            //表单重置
+            document.getElementById('demandFrom').reset();
+
+            if(pid != -1 && pid != null){
                 var modal = $(this);
-                modal.find('.modal-body input').val(recipient);
-            })
+                modal.find('#d4pjID').val(pid);
+                modal.find('#d4pjName').val(pname);
+                modal.find('#dmID').val(Math.floor(new Date().getTime()));
+            }else{
+                return false;
+            }
+
+        })
     </script>  
 
     <script>
@@ -416,18 +322,278 @@
             $(".project-nav").addClass('active');
             $('.item-content').hide();
             $('.item-project').show();
+
+            $('#pfrom_reset').click();
         }
         function demandClick() {
             $(".nav-item").removeClass('active');
             $(".demand-nav").addClass('active');
             $('.item-content').hide();
             $('.item-demand').show();
+
+            var pid = $('#hasPID').val();
+            if(pid == ''){
+                $('#hasPID').val(-1);
+                pid = -1;
+            }   
+
+            //销毁表格
+            $("#demandList").bootstrapTable('destroy'); 
+            //新建表格
+            var dtable = new Demandtable();
+            dtable.Init(pid);
         }
         function versionClick() {
             $(".nav-item").removeClass('active');
             $(".version-nav").addClass('active');
             $('.item-content').hide();
             $('.item-version').show();
+
+            var pid = $('#hasPID').val();
+            if(pid == ''){
+                $('#hasPID').val(-1);
+                pid = -1;
+            }   
+
+            //销毁表格
+            $("#versionList").bootstrapTable('destroy'); 
+            //新建表格
+            var vtable = new Versiontable();
+            vtable.Init(pid);
+        }
+    </script>
+
+    <script>
+        //清除select 选择方法
+        function cleanSelect(){
+            $('.selectpicker').selectpicker('deselectAll');
+        }
+
+        //添加项目方法
+        function addProject(){
+            var pjName = $('#pjName').val();
+            var pjDesc = $('#pjDesc').val();
+
+            var pm_member = $("#pm_member").val();
+            var de_member =$("#de_member").val();
+            var te_member =$("#te_member").val();
+            var da_member =$("#da_member").val();
+
+            pm_member = pm_member == null?null:pm_member;
+            de_member = de_member == null?null:de_member.join(',');
+            te_member = te_member == null?null:te_member.join(',');
+            da_member = da_member == null?null:da_member.join(',');
+
+            var pjId = Math.floor(new Date().getTime()/1000 );
+            $('#pjId').val(pjId);
+
+            var submitData = {
+                'pjName': pjName,
+                'pjId': pjId,
+                'pjDesc': pjDesc,
+                'pm_member': pm_member,
+                'de_member':de_member,
+                'te_member': te_member,
+                'da_member':da_member 
+            };
+
+            $.ajax({
+                url:'/project/addProject',
+                type:'POST',
+                async:true,
+                dataType:'json',
+                data:submitData,
+                success:function(result){
+                    if(result.success){
+                        var data = JSON.parse(result.data);
+                        $('#hasPID').val(data.pjId);
+                        $('#hasPNAME').val(data.pjName);
+                        demandClick();  
+                    }else{
+                        alert(result.msg);
+                    }
+                },
+                error:function(error){
+                   alert('系统异常，请稍后再添加');
+                }
+            });
+            
+        }
+
+    </script>
+
+    <script>
+        function Demandtable(){
+            this.Init = function(pid){
+                $('#demandList').bootstrapTable({
+                    url: '/project/getAlldm',
+                    method:'get',
+                    queryParams: function queryParams(params) {   //设置查询参数  
+                            var param = {
+                                limit: params.limit,    //页面大小
+                                offset: params.offset,  //页码
+                                order:params.order,     //排序
+                                pid:pid  //所属项目
+                            };
+                            return param;
+                        },
+                    toolbar: '#dmtoolbar',              //工具按钮用哪个容器
+                    checkboxHeader: false,              //设置false 将在列头隐藏check-all checkbox .
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                      //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 20, 50],             //可供选择的每页的行数（*）
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    minimumCountColumns: 2,             //最少允许的列数
+                    clickToSelect: true,                //是否启用点击选中行
+                    singleSelect:true,                  //只能选中一行
+                    height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                    columns: [
+                            {
+                                field: 'id',
+                                title: '需求编号'
+                            }, {
+                                field: 'name',
+                                title: '需求名称',
+                            }, {
+                                field: 'state',
+                                title: '需求状态',
+                                formatter: function (data) {
+                                    if (data == 0) {
+                                        return "未分解";
+                                    } else if (data == 1) {
+                                        return "进行中";
+                                    } else if(data == 2 ){
+                                        return "已完成";
+                                    }else if(data == 3 ){
+                                        return "暂停开发";
+                                    }else if(data == 4 ){
+                                        return "异常问题";
+                                    }
+                                }
+                            }, {
+                                field: 'd_desc',
+                                title: '需求描述'
+                            }]
+                });
+            }
+        }
+
+        function addDemand(){
+            var d4pjID = $('#d4pjID').val();
+            var dmName = $('#dmName').val();
+            var dmID = $('#dmID').val();
+            var dmDesc = $('#dmDesc').val();
+
+            var submitData = {
+                'pid': d4pjID,
+                'dmName': dmName,
+                'dmID': dmID,
+                'dmDesc': dmDesc
+            };
+
+            $.ajax({
+                url:'/project/addDemand',
+                type:'POST',
+                async:true,
+                dataType:'json',
+                data:submitData,
+                success:function(result){
+                    if(result.success){
+                        //关闭窗口
+                        $('#demandModal').modal('hide');
+                        //刷新列表
+                        $("#demandList").bootstrapTable('refresh');
+
+                    }else{
+                        alert(result.msg);
+                    }
+                },
+                error:function(error){
+                   alert('系统异常，请稍后再添加');
+                }
+            });
+
+        }
+    </script>
+
+    <script>
+        function Versiontable() {
+            this.Init = function (pid) {
+                $('#demandList').bootstrapTable({
+                    url: '/project/getAllversion',
+                    method: 'get',
+                    queryParams: function queryParams(params) {   //设置查询参数  
+                        var param = {
+                            limit: params.limit,    //页面大小
+                            offset: params.offset,  //页码
+                            order: params.order,     //排序
+                            pid: pid  //所属项目
+                        };
+                        return param;
+                    },
+                    toolbar: '#versiontoolbar',              //工具按钮用哪个容器
+                    checkboxHeader: false,              //设置false 将在列头隐藏check-all checkbox .
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                      //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 20, 50],             //可供选择的每页的行数（*）
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    minimumCountColumns: 2,             //最少允许的列数
+                    clickToSelect: true,                //是否启用点击选中行
+                    singleSelect: true,                  //只能选中一行
+                    height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                    columns: [
+                        {
+                            field: 'id',
+                            title: '版本编号'
+                        }, {
+                            field: 'name',
+                            title: '版本代号',
+                        }, {
+                            field: 'state',
+                            title: '版本状态',
+                            formatter: function (data) {
+                                if (data == 0) {
+                                    return "未开始";
+                                } else if (data == 1) {
+                                    return "进行中";
+                                } else if (data == 2) {
+                                    return "已完成";
+                                }else if (data == 3) {
+                                    return "版本暂停";
+                                }else if (data == 4) {
+                                    return "版本作废";
+                                }
+                            }
+                        }, {
+                            field: 'v_desc',
+                            title: '版本描述'
+                        },{
+                            field: 'pctime',
+                            title: '计划开始时间'
+                        },{
+                            field: 'petime',
+                            title: '计划结束时间'
+                        },{
+                            field: 'actime',
+                            title: '实际开始时间'
+                        },{
+                            field: 'aetime',
+                            title: '实际结束时间'
+                        },]
+                });
+            }
         }
     </script>
 </body>
