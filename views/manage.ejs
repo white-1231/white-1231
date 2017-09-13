@@ -48,7 +48,7 @@
 
                     <table id="userList"></table>
                         
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" >
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -146,6 +146,82 @@
                 
                 <div class="item-content item-project">
                     <h2 class="sub-header">管理项目</h2>
+                    <div id="projecttoolbar" class="btn-group">
+                        <button id="btn_update" type="button" class="btn btn-default" data-toggle="modal" data-target="#pjUModal">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>修改
+                        </button>
+
+                        <button id="btn_update" type="button" class="btn btn-default" data-toggle="modal" data-target="#pjDModal">
+                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>删除
+                        </button>
+                    </div>
+
+                    <table id="projectList"></table>
+
+                    <div class="modal fade" id="pjUModal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">修改项目信息</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10">
+                                            <form class="form-horizontal" id="pjFrom">
+                                                <div class="form-group ">
+                                                    <label for="pjId" class="col-sm-2 control-label">项目编号</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="pjId" placeholder="项目编号" readonly>
+                                                        <input type="hidden" class="form-control" id="petime" placeholder="结束时间">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="pjName" class="col-sm-2 control-label">项目名称</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="pjName" placeholder="项目名称">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="pjState" class="col-sm-2 control-label">账号状态</label>
+                                                    <div class="col-sm-8">
+                                                        <label class="radio-inline">
+                                                                <input type="radio" name="pjState" id="pjState" value="0"> 未开始
+                                                            </label>
+                                                        <label class="radio-inline">
+                                                                <input type="radio" name="pjState" id="pjState" value="1"> 进行中
+                                                            </label>
+                                                        <label class="radio-inline">
+                                                                <input type="radio" name="pjState" id="pjState" value="2"> 已完成
+                                                            </label>
+                                                        <label class="radio-inline">
+                                                                    <input type="radio" name="pjState" id="pjState" value="3"> 暂停/中止
+                                                                </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="pjDesc" class="col-sm-2 control-label">项目描述</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control" rows="10" id="pjDesc" placeholder="项目描述"></textarea>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        <div class="col-md-1">
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" onclick="commitUpdatepj();">提交</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="item-content item-system">
@@ -158,8 +234,8 @@
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!-- table -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
 
     <script>
         //界面显示控制
@@ -168,12 +244,19 @@
             $(".user-nav").addClass('active');
             $('.item-content').hide();
             $('.item-user').show();
+
+            //初始化userTable  
+            var utable = new Usertable();
+            utable.Init();
         }
         function projectClick() {
             $(".nav-item").removeClass('active');
             $(".project-nav").addClass('active');
             $('.item-content').hide();
             $('.item-project').show();
+
+            var ptable = new Projecttable();
+            ptable.Init();
         }
         function systemClick() {
             $(".nav-item").removeClass('active');
@@ -186,16 +269,20 @@
     <script>
         $(function () {
             userClick(); 
-            //初始化userTable
-            var utable = new Usertable();
-            utable.Init();
         });
+    </script>
 
-        function Usertable(){
-            this.Init = function(){
+    <script>
+        
+    </script>
+
+    <script>
+        //用户表单初始化对象
+        function Usertable() {
+            this.Init = function () {
                 $('#userList').bootstrapTable({
                     url: '/manage/getAllUser',
-                    method:'post',
+                    method: 'post',
                     toolbar: '#usertoolbar',            //工具按钮用哪个容器
                     checkboxHeader: false,              //设置false 将在列头隐藏check-all checkbox .
                     striped: true,                      //是否显示行间隔色
@@ -209,60 +296,56 @@
                     showRefresh: true,                  //是否显示刷新按钮
                     minimumCountColumns: 2,             //最少允许的列数
                     clickToSelect: true,                //是否启用点击选中行
-                    singleSelect:true,                  //只能选中一行
-                    height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    singleSelect: true,                  //只能选中一行
+                    height: 550,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
                     uniqueId: "id",                     //每一行的唯一标识，一般为主键列
                     columns: [
-                            {
-                                checkbox: true
-                            },
-                            {
-                                field: 'id',
-                                title: '用户编号'
-                            }, {
-                                field: 'nickname',
-                                title: '昵称',
-                            }, {
-                                field: 'state',
-                                title: '需求状态',
-                                formatter: function (data) {
-                                    if (data == 0) {
-                                        return "未激活";
-                                    } else if (data == 1) {
-                                        return "正常";
-                                    } else if(data == 2 ){
-                                        return "停用";
-                                    }
+                        {
+                            checkbox: true
+                        },
+                        {
+                            field: 'id',
+                            title: '用户编号'
+                        }, {
+                            field: 'nickname',
+                            title: '昵称',
+                        }, {
+                            field: 'state',
+                            title: '帐号状态',
+                            formatter: function (data) {
+                                if (data == 0) {
+                                    return "未激活";
+                                } else if (data == 1) {
+                                    return "正常";
+                                } else if (data == 2) {
+                                    return "停用";
                                 }
-                            }, {
-                                field: 'tel',
-                                title: '联系方式'
-                            }, {
-                                field: 'email',
-                                title: '邮箱'
-                            }]
+                            }
+                        }, {
+                            field: 'tel',
+                            title: '联系方式'
+                        }, {
+                            field: 'email',
+                            title: '邮箱'
+                        }]
                 });
             }
         }
 
-    </script>
-
-    <script>
-        //模态框赋值
+        //用户修改模态框赋值
         $('#myModal').on('show.bs.modal', function (event) {
             var $utable = $('#userList');
             var selectData = $utable.bootstrapTable('getSelections');
             var modal = $(this);
-
+            //是否有选择用户判断
             var flag = selectData == '';
-            alert(flag);
 
             //表单重置
             document.getElementById('userFrom').reset();
             //警告信息隐藏
             $('#errormsg').addClass('hidden');
-            $('#tel_error_icon').addClass('hidden');     
-            $('#email_error_icon').addClass('hidden');    
+            $('#tel_error_icon').addClass('hidden');
+            $('#email_error_icon').addClass('hidden');
 
             if ((!flag) && selectData[0].id != null) {
                 //个人信息赋值
@@ -272,67 +355,67 @@
                 modal.find('#userEmail').val(selectData[0].email);
                 modal.find('input[name="userState"]').get(selectData[0].state).checked = true;
                 //获取权限
-                $.get("/manage/getpermission?uid="+selectData[0].id, function (result) {
+                $.get("/manage/getpermission?uid=" + selectData[0].id, function (result) {
                     var permission = result.data;
                     //本地备份
                     localpms = result.data;
                     //赋值
-                    for(var i =0 ;i<permission.length;i++){
-                        if(permission[i] == 1){
-                            $("input:checkbox[value='"+i+"']").attr('checked',true);
-                        }else{
-                            $("input:checkbox[value='"+i+"']").attr('checked',false);
+                    for (var i = 0; i < permission.length; i++) {
+                        if (permission[i] == 1) {
+                            $("input:checkbox[value='" + i + "']").attr('checked', true);
+                        } else {
+                            $("input:checkbox[value='" + i + "']").attr('checked', false);
                         }
                     }
                 });
-            }else{
+            } else {
                 return false;
             }
         });
 
-        function checkTEL(tel){
+        function checkTEL(tel) {
             var pat = /^(13[0-9]|14[5|7]|15\d|18\d)\d{8}$/;
 
-            if( 'object' == typeof tel){
+            if ('object' == typeof tel) {
                 //onblur
-                if(!pat.test(tel.value)){
-                    $('#tel_error_icon').removeClass('hidden');    
-                }else{
-                    $('#tel_error_icon').addClass('hidden');               
+                if (!pat.test(tel.value)) {
+                    $('#tel_error_icon').removeClass('hidden');
+                } else {
+                    $('#tel_error_icon').addClass('hidden');
                 }
-            }else{
+            } else {
                 //submit
-                if(!pat.test(tel)){
-                   return false;
-                }else{
+                if (!pat.test(tel)) {
+                    return false;
+                } else {
                     return true;
                 }
 
             }
         }
 
-        function checkEmail(email){
+        function checkEmail(email) {
             var pat = /^[a-zA-z0-9]+@[a-zA-z0-9]+(\.[a-zA-z0-9]+)+$/;
 
-            if( 'object' == typeof email){
+            if ('object' == typeof email) {
                 //onblur
-                if(!pat.test(email.value)){
-                    $('#email_error_icon').removeClass('hidden'); 
-                }else{
-                    $('#email_error_icon').addClass('hidden');              
+                if (!pat.test(email.value)) {
+                    $('#email_error_icon').removeClass('hidden');
+                } else {
+                    $('#email_error_icon').addClass('hidden');
                 }
-            }else{
+            } else {
                 //submit
-                if(!pat.test(email)){
-                   return false;
-                }else{
+                if (!pat.test(email)) {
+                    return false;
+                } else {
                     return true;
                 }
 
             }
         }
 
-        function commitUpdate(){
+        function commitUpdate() {
             //警告信息隐藏
             $('#errormsg').addClass('hidden');
 
@@ -342,14 +425,14 @@
             var userEmail = $('#userEmail').val();
             var userState = $("input[name='userState']:checked").val();
             //checkbox 获取值
-            var permission = [0,0,0,0,0,0]; 
-            $("input[name='permission']:checked").each(function(){
+            var permission = [0, 0, 0, 0, 0, 0];
+            $("input[name='permission']:checked").each(function () {
                 permission[parseInt($(this).val())] = 1;
             });
-            
+
             var commitpms = checkPermision(permission);
 
-            if(checkTEL(userTel) && checkEmail(userEmail)){
+            if (checkTEL(userTel) && checkEmail(userEmail)) {
 
                 var submitData = {
                     'id': usrId,
@@ -357,35 +440,35 @@
                     'tel': userTel,
                     'email': userEmail,
                     'state': userState,
-                    'permission':JSON.stringify(commitpms) 
+                    'permission': JSON.stringify(commitpms)
                 };
 
                 $.ajax({
-                    url:'/manage/userUpdate',
-                    type:'POST',
-                    async:true,
-                    dataType:'json',
-                    data:submitData,
-                    success:function(result){
+                    url: '/manage/userUpdate',
+                    type: 'POST',
+                    async: true,
+                    dataType: 'json',
+                    data: submitData,
+                    success: function (result) {
 
-                        if(result.success){
+                        if (result.success) {
                             //关闭窗口
                             $('#myModal').modal('hide');
                             //刷新列表
                             $("#userList").bootstrapTable('refresh');
 
-                        }else{
+                        } else {
                             $('#errormsg').html(result.msg);
                             $('#errormsg').removeClass('hidden');
                         }
                     },
-                    error:function(error){
+                    error: function (error) {
                         $('#errormsg').html('系统异常，请稍后注册');
                         $('#errormsg').removeClass('hidden');
                     }
                 });
 
-            }else{
+            } else {
                 $('#errormsg').html('请检查填写表格是否存在x存在');
                 $('#errormsg').removeClass('hidden');
             }
@@ -394,35 +477,176 @@
         //待修改用户原权限本地备份
         var localpms = null;
         //确定修改的权限
-        function checkPermision(pmsArr){
-            var del =[];
-            var add =[];
-            for(var i=0 ; i<pmsArr.length;i++){
+        function checkPermision(pmsArr) {
+            var del = [];
+            var add = [];
+            for (var i = 0; i < pmsArr.length; i++) {
                 var newObj = pmsArr[i];
                 var oldObj = localpms[i];
 
                 //0,1 不判断
-                if(i ==0 ||i == 1){
+                if (i == 0 || i == 1) {
                     continue;
                 }
 
-                if( newObj == oldObj){
+                if (newObj == oldObj) {
 
-                }else{
-                    if(newObj >oldObj){
+                } else {
+                    if (newObj > oldObj) {
                         add.push(i);
-                    }else{
+                    } else {
                         del.push(i);
                     }
                 }
             }
 
-            var permission ={
-                del:del,
-                add:add
+            var permission = {
+                del: del,
+                add: add
             }
 
             return permission;
+        }
+    </script>
+
+    <script>
+        function Projecttable(){
+            this.Init = function(){
+                $('#projectList').bootstrapTable({
+                    url: '/manage/getAllProject',
+                    method: 'post',
+                    toolbar: '#projecttoolbar',         //工具按钮用哪个容器
+                    checkboxHeader: false,              //设置false 将在列头隐藏check-all checkbox .
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                      //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 20, 50],             //可供选择的每页的行数（*）
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    minimumCountColumns: 2,             //最少允许的列数
+                    clickToSelect: true,                //是否启用点击选中行
+                    singleSelect: true,                  //只能选中一行
+                    height: 550,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                    columns: [
+                        {
+                            checkbox: true
+                        },
+                        {
+                            field: 'id',
+                            title: '项目编号'
+                        }, {
+                            field: 'name',
+                            title: '项目名称',
+                        }, {
+                            field: 'state',
+                            title: '项目状态',
+                            formatter: function (data) {
+                                if (data == 0) {
+                                    return "未开始";
+                                } else if (data == 1) {
+                                    return "进行中";
+                                } else if (data == 2) {
+                                    return "已完结";
+                                }else if (data == 3) {
+                                    return "暂停/中止";
+                                }
+                            }
+                        }, {
+                            field: 'p_desc',
+                            title: '描述'
+                        }, {
+                            field: 'creattime',
+                            title: '项目创建时间',
+                            formatter: function (data) {
+                                var timestr = new Date(data *1000).Format("yyyy-MM-dd") ;
+
+                                return timestr;
+                            }
+                        }, {
+                            field: 'endtime',
+                            title: '结束时间',
+                            formatter: function (data) {
+                                if(data == -1){
+                                    return '-----';
+                                }
+
+                                var timestr = new Date(data *1000).Format("yyyy-MM-dd") ;
+
+                                return timestr;
+                            }
+                        }]
+                });
+            }
+        }
+
+        //项目修改模态框赋值
+        $('#pjUModal').on('show.bs.modal', function (event) {
+            var $utable = $('#projectList');
+            var selectData = $utable.bootstrapTable('getSelections');
+            var modal = $(this);
+
+            //是否有选择项目判断
+            var flag = selectData == '';
+            
+            //表单重置
+            document.getElementById('pjFrom').reset();
+
+            if ((!flag) && selectData[0].id != null) {
+                modal.find('#pjId').val(selectData[0].id);
+                modal.find('#petime').val(selectData[0].endtime);
+                modal.find('#pjName').val(selectData[0].name);
+                modal.find('input[name="pjState"]').get(selectData[0].state).checked = true;
+                modal.find('#pjDesc').val(selectData[0].p_desc);
+               
+            }else{
+                return false;
+            }
+        });
+
+        function commitUpdatepj(){
+            var pjId = $('#pjId').val();
+            var pjName = $('#pjName').val();
+            var pjDesc = $('#pjDesc').val();
+            var pjState = $("input[name='pjState']:checked").val();
+            var petime =  $('#petime').val();
+
+            console.log(pjId + ',' + pjName + ',' + pjDesc + ','+pjState +','+petime);
+
+            var submitData = {
+                'pjId': pjId,
+                'pjName': pjName,
+                'pjDesc': pjDesc,
+                'pjState': pjState,
+                'petime':petime
+            };
+
+            $.ajax({
+                url: '/manage/pjUpdate',
+                type: 'POST',
+                async: true,
+                dataType: 'json',
+                data: submitData,
+                success: function (result) {
+
+                    if (result.success) {
+                        //关闭窗口
+                        $('#pjUModal').modal('hide');
+                        //刷新列表
+                        $("#projectList").bootstrapTable('refresh');
+
+                    } else {
+                        alert(result.msg); 
+                    }
+                },
+                error: function (error) {
+                    alert('系统异常，请稍后注册');
+                }
+            });
+
         }
     </script>
 </body>

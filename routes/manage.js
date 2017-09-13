@@ -4,6 +4,7 @@ var debug = require('debug')('mytk:index');
 var sessionUtils = require('../utils/sessionUtils');
 var userdb = require('../models/user/userdb');
 var permissiondb = require('../models/permission/permissiondb');
+var projectdb = require('../models/project/projectdb');
 
 var router = express.Router();
 
@@ -109,5 +110,56 @@ router.get('/getpermission', function (req, res) {
     return res.json({data:permission});
   });
 });
+
+/**
+ * AJAX
+ * 获取全部项目，分页
+ */
+router.post('/getAllProject', function(req, res) {
+  var queryData = req.body;
+  var order = queryData.order;
+  var offset = queryData.offset;
+  var limit = queryData.limit;
+
+  projectdb.get_pjtotal(function (count) {
+
+    if (count == 0) {
+      return res.json({ total: count, rows: null });
+    }
+
+    projectdb.get_allpj_bypage(order, offset, limit, function (ret) {
+      if (ret) {
+        return res.json({ total: count, rows: ret });
+      }
+    });
+
+  });
+});
+
+router.post('/pjUpdate',function(req,res){
+  var submitData = req.body;
+  var $pjId = submitData.pjId;
+  var $pjName = submitData.pjName;
+  var $pjDesc = submitData.pjDesc;
+  var $pjState = submitData.pjState;
+  var $petime = submitData.petime;
+  
+  if($pjState >1){
+    if($petime == -1){
+      $petime = Math.floor(new Date().getTime() /1000);
+    }
+  }else{
+    $petime == -1;
+  }
+
+  projectdb.update_pjByID($pjId,$pjName,$pjState,$pjDesc,$petime, function(ret){
+    if(ret){
+      return res.json({success:true,msg:'success'});
+    }else{
+      return res.json({success:false,msg:'db error'});
+    }
+  });  
+
+})
 
 module.exports = router;

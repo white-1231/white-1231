@@ -27,38 +27,41 @@ function noCallback(a, b, c, d, e, f, g) {
 /**
  * 添加需求
  */
-exports.add_version = function(id,pid,name,d_desc,callback){
-    // callback = callback == null ? noCallback : callback;
+exports.add_version = function(pid,vname,vdesc,vpctime,vpetime,callback){
+    callback = callback == null ? noCallback : callback;
 
-    // if (id == null || id == undefined || id == '') {
-    //     callback(false);
-    //     return;
-    // }
+    if (pid == null || pid == undefined || pid == '') {
+        callback(false);
+        return;
+    }
 
-    // if (pid == null || pid == undefined || pid == '') {
-    //     callback(false);
-    //     return;
-    // }
+    if (vname == null || vname == undefined || vname == '') {
+        callback(false);
+        return;
+    }
 
-    // if (name == null || name == undefined || name == '') {
-    //     callback(false);
-    //     return;
-    // }
+    if(vpctime == null || vpctime == undefined || vpctime == ""){
+        vpctime = Math.floor(new Date().getTime()/1000);
+    }
 
-    // var sql='INSERT INTO t_demand (id,name,d_desc,state,pid) VALUES("{0}","{1}","{2}",0,"{3}"); ';
-    // sql = sql.format(id,name,d_desc,pid);
+    if(vpetime == null || vpetime == undefined || vpetime == ""){
+        vpetime = Math.floor(new Date().getTime()/1000) +604800;
+    }
 
-    // console.log(sql);
+    var sql='INSERT INTO t_version (id,pid,name,v_desc,state,pctime,petime) VALUES(0,"{0}","{1}","{2}",0,{3},{4}); ';
+    sql = sql.format(pid,vname,vdesc,vpctime,vpetime);
 
-    // query(sql, function(err, rows, fields) {
-    //     if (err) {
-    //         callback(false);
-    //         throw err; 
-    //     }
-    //     else{
-    //         callback(true);            
-    //     }
-    // });
+    console.log(sql);
+
+    query(sql, function(err, rows, fields) {
+        if (err) {
+            callback(false);
+            throw err; 
+        }
+        else{
+            callback(true);            
+        }
+    });
 }
 
 exports.get_allversion_bypj = function (order, offset, limit, pid, callback) {
@@ -82,8 +85,8 @@ exports.get_allversion_bypj = function (order, offset, limit, pid, callback) {
         limit = 10;
     }
 
-    var sql = 'SELECT id,name,state,v_desc,pid,pctime,petime,actime,aetime FROM t_version ORDER BY id {0} LIMIT {1},{2} ';
-    sql = sql.format(order, parseInt(offset * limit), parseInt(limit * (offset + 1)));
+    var sql = 'SELECT id,name,state,v_desc,pid,pctime,petime,actime,aetime FROM t_version where pid = "{3}" ORDER BY id {0} LIMIT {1},{2} ';
+    sql = sql.format(order, parseInt(offset),parseInt(limit+offset),pid);
     console.log(sql);
 
     query(sql, function (err, rows, fields) {

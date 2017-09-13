@@ -82,8 +82,8 @@ exports.get_alldm = function (order, offset, limit, pid, callback) {
         limit = 10;
     }
 
-    var sql = 'SELECT id,name,state,d_desc,pid FROM t_demand ORDER BY id {0} LIMIT {1},{2} ';
-    sql = sql.format(order, parseInt(offset * limit), parseInt(limit * (offset + 1)));
+    var sql = 'SELECT id,name,state,d_desc,pid FROM t_demand where pid = "{3}" ORDER BY id {0} LIMIT {1},{2} ';
+    sql = sql.format(order, parseInt(offset),parseInt(limit+offset),pid);
     console.log(sql);
 
     query(sql, function (err, rows, fields) {

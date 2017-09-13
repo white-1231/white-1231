@@ -55,3 +55,84 @@ exports.add_project = function(id,name,desc,callback){
         }
     });
 }
+
+/**
+ * 获取全部用户计数
+ */
+exports.get_pjtotal = function (callback) {
+
+    callback = callback == null ? noCallback : callback;
+
+    var sql = 'SELECT count(id)as count FROM t_project ';
+    console.log(sql);
+
+    query(sql, function (err, rows, fields) {
+        if (err) {
+            throw err;
+        }
+        else {
+            callback(rows[0].count);
+        }
+    });
+
+}
+
+exports.get_allpj_bypage = function (order, offset, limit, callback) {
+
+    callback = callback == null ? noCallback : callback;
+
+    if (order == null || order == '' || order == undefined || (order != "asc" || order != "desc")) {
+        order = 'ASC';
+    }
+
+    if (offset == null || offset == '' || offset == undefined) {
+        offset = 0;
+    }
+
+    if (limit == null || limit == '' || limit == undefined) {
+        limit = 10;
+    }
+
+    var sql = 'SELECT id,name,state,p_desc,creattime,endtime FROM t_project ORDER BY state {0} LIMIT {1},{2} ';
+    sql = sql.format(order, parseInt(offset), parseInt(limit + offset));
+    console.log(sql);
+
+    query(sql, function (err, rows, fields) {
+        if (err) {
+            throw err;
+        }
+        else {
+            if (rows.length > 0) {
+                callback(rows);
+            }
+            else {
+                callback(false);
+            }
+        }
+    });
+
+}
+
+exports.update_pjByID = function (id, name, state, p_desc, endtime, callback) {
+    callback = callback == null ? noCallback : callback;
+
+    if (id == null || id == undefined || id == '') {
+        callback(false);
+        return;
+    }
+
+    var sql ='UPDATE t_project SET name="{0}", p_desc="{1}", state={2}, endtime={3} WHERE id={4}';
+    sql =sql.format(name,p_desc,state,endtime,id);
+    console.log(sql);
+
+    query(sql, function(err, rows, fields) {
+        if (err) {
+            callback(false);
+            throw err; 
+        }
+        else{
+            callback(true);            
+        }
+    });
+    
+}

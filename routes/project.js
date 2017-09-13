@@ -7,6 +7,7 @@ var permissiondb = require('../models/permission/permissiondb');
 var groupdb = require('../models/group/groupdb');
 var projectdb = require('../models/project/projectdb');
 var demanddb = require('../models/demand/demanddb');
+var versiondb = require('../models/version/versiondb');
 
 var router = express.Router();
 
@@ -166,12 +167,12 @@ router.get('/getAllversion',function(req,res){
     return res.json({total:0,rows:null});
   }
 
-  demanddb.get_dmtotal_bypj(pid,function(count){
+  versiondb.get_dmtotal_bypj(pid,function(count){
     if(count == 0){
       return res.json({total:count,rows:null});
     }
 
-    demanddb.get_allversion_bypj(order,offset,limit,pid,function(ret){
+    versiondb.get_allversion_bypj(order,offset,limit,pid,function(ret){
       if(ret){
         return res.json({total:count,rows:ret});
       }
@@ -179,5 +180,25 @@ router.get('/getAllversion',function(req,res){
 
   });
 });
+
+router.post('/addVersion',function(req,res){
+  var submitData = req.body;
+  var $pid = submitData.pid;
+  var $vName = submitData.vName;
+  var $vpctime = submitData.vpctime;
+  var $vpetime = submitData.vpetime;
+  var $vdesc = submitData.vdesc;
+
+  $vpctime = '' ;
+  $vpetime = '' ;
+
+  versiondb.add_version($pid,$vName,$vdesc,$vpctime,$vpetime,function(ret){
+    if(ret){
+      return res.json({success:true,msg:'add success'});
+    }else{
+      return res.json({success:false,msg:'db operate error'});
+    }
+  })
+})
 
 module.exports = router;
