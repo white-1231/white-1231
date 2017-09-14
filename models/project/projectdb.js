@@ -1,5 +1,4 @@
 //引用
-var  crypto = require('../../utils/cryptoUtils');
 var  mysqlpool = require('../../utils/mysqlPool');
 
 function query(sql, callback) {
@@ -135,4 +134,36 @@ exports.update_pjByID = function (id, name, state, p_desc, endtime, callback) {
         }
     });
     
+}
+
+/**
+ * 根据用户id获取所属项目
+ */
+exports.getPeoject_byUid = function (uid,callback) {
+    callback = callback == null ? noCallback : callback;
+
+    if (uid == null || uid == undefined || uid == '') {
+        callback(false);
+        return;
+    }
+
+    var sql = 'SELECT id,name FROM t_project where id in (SELECT pid FROM t_group where uid = {0} group by pid) and state = {1}';
+    // TODO  项目状态暂时没有配置，统一使用0  ------- 0914
+    sql = sql.format(uid, 0);
+
+    console.log(sql);
+
+    query(sql, function (err, rows, fields) {
+        if (err) {
+            throw err;
+        }
+        else {
+            if (rows.length > 0) {
+                callback(rows);
+            }
+            else {
+                callback(false);
+            }
+        }
+    });
 }

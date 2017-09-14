@@ -101,7 +101,7 @@
                                         </div>
                                         <div class="col-xs-8">
                                             <select id="te_member" title="请选择测试人员" name="usertype" class="selectpicker show-tick form-control" multiple data-live-search="false">
-                                                <% for (var i=0; i<group.te.length; i++) { %>
+                                                <% for (var i=0; i< group.te.length; i++) { %>
                                                     <option value="<%=group.te[i].id %>" > <%=group.te[i].nickname %></option>    
                                                 <% } %>
                                             </select>
@@ -218,64 +218,64 @@
                     <table id="versionList"></table>
 
                     <div class="modal fade" id="versionModal" tabindex="-1" role="dialog" aria-labelledby="vsLabel">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                           <span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="vsLabel">新增版本</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-md-1"></div>
-                                            <div class="col-md-10">
-                                                <form class="form-horizontal" id="versionFrom">
-                                                    <div class="form-group ">
-                                                        <label for="v4pjID" class="col-sm-2 control-label">项目ID</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="text" class="form-control" id="v4pjName" placeholder="项目名称" readonly>
-                                                            <input type="hidden" class="form-control" id="v4pjID" placeholder="项目ID">
-                                                        </div>
+                                    <h4 class="modal-title" id="vsLabel">新增版本</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10">
+                                            <form class="form-horizontal" id="versionFrom">
+                                                <div class="form-group ">
+                                                    <label for="v4pjID" class="col-sm-2 control-label">项目ID</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="v4pjName" placeholder="项目名称" readonly>
+                                                        <input type="hidden" class="form-control" id="v4pjID" placeholder="项目ID">
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="vName" class="col-sm-2 control-label">版本代号</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="text" class="form-control" id="vName" placeholder="版本代号">
-                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="vName" class="col-sm-2 control-label">版本代号</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="vName" placeholder="版本代号">
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="vpctime" class="col-sm-2 control-label">计划开始</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="text" class="form-control" id="vpctime" placeholder="计划开始" >
-                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="vpctime" class="col-sm-2 control-label">计划开始</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="vpctime" placeholder="计划开始">
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="vpetime" class="col-sm-2 control-label">计划结束</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="text" class="form-control" id="vpetime" placeholder="计划结束">
-                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="vpetime" class="col-sm-2 control-label">计划结束</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="vpetime" placeholder="计划结束">
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="vdesc" class="col-sm-2 control-label">版本描述</label>
-                                                        <div class="col-sm-8">
-                                                            <textarea class="form-control" rows="5" id="vdesc" placeholder="版本描述"></textarea>
-                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="vdesc" class="col-sm-2 control-label">版本描述</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control" rows="5" id="vdesc" placeholder="版本描述"></textarea>
                                                     </div>
-                                                </form>
-                                            </div>
-                                            <div class="col-md-1">
-    
-                                            </div>
-    
+                                                </div>
+                                            </form>
                                         </div>
+                                        <div class="col-md-1">
+
+                                        </div>
+
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" onclick="addVersion();">提交</button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" onclick="addVersion();">提交</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -335,6 +335,7 @@
                 pid = -1;
             }   
 
+            var pid = $('#pid').val();
             //销毁表格
             $("#versionList").bootstrapTable('destroy'); 
             //新建表格

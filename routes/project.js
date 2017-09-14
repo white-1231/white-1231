@@ -9,14 +9,54 @@ var projectdb = require('../models/project/projectdb');
 var demanddb = require('../models/demand/demanddb');
 var versiondb = require('../models/version/versiondb');
 
+var  asyncdb = require('../models/async/asyncdb');
+
 var router = express.Router();
 
 router.get('/', function (req, res, next) {
   var result = sessionUtils.checkUsefulSession(req.session);
   if (result == 1) {
-    res.render('project', { title: '项目' });
-  } else {
-    res.render('login', { title: '首页' })
+    //当前用户
+    var user = req.session.user;
+    //项目id  ，只用在项目页面，点击指定项目存在
+    var pid = req.query.pid;
+
+    //查询所属项目
+    projectdb.getPeoject_byUid(user.id ,function(ret){
+      if(ret){
+        //pid 未指定，则查询第一个项目
+        if(pid == undefined){
+          pid = ret[0].id;
+        }; 
+        //同步查询项目组，项目版本 。--- 共同进行
+        var data = Promise.all([asyncdb.getGroup_byPid(pid),asyncdb.getVersion_byPid(pid)]);
+        //链式处理 ，results 为 同步查询结果
+        data.then(function (results) {
+          
+          console.log(ret);
+          console.log(results);
+
+          var groupname =['-1','M','PM','DE','TE','DA'];
+          var statename = ['未开始','进行中','已完成','版本暂停','版本作废'];
+
+          res.render('project', { 
+            title: '项目' ,
+            selectpj:pid,                   //用户选择的项目
+            grouparr:results[0],           //组成员
+            groupname:groupname,          //职能名称
+            statename:statename,          //版本状态名称
+            versionarr:results[1] ,       // 版本列表
+            pjarr :ret                    //项目列表
+          });
+        });
+
+      }else{
+        res.render('project', { title: '项目' });
+      }
+    });
+
+    } else {
+      res.render('login', { title: '首页' })
   }
 });
 
@@ -200,5 +240,15 @@ router.post('/addVersion',function(req,res){
     }
   })
 })
+
+router.get('/pjdetails',function(req,res,next){
+  var result = sessionUtils.checkUsefulSession(req.session);
+  
+    if (result == 1) {
+      res.render('projectDetails', { title: '项目详细' });
+    }else{
+      res.render('login', { title: '首页' });
+    }
+});
 
 module.exports = router;

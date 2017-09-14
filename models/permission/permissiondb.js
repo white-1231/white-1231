@@ -1,5 +1,4 @@
 //引用
-var  crypto = require('../../utils/cryptoUtils');
 var  mysqlpool = require('../../utils/mysqlPool');
 
 function query(sql,callback){

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/dashboard.css' />
+    <!-- table -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+
+    <style>
+        .item-content {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <% include nav.ejs %>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="nav-item project-nav"><a href="#" onclick='projectClick();return false;'>项目信息 </a></li>
+                    <li class="nav-item version-nav"><a href="#" onclick='versionClick();return false;'>管理版本</a></li>
+                    <li class="nav-item demand-nav"><a href="#" onclick='demandClick();return false;'>管理需求</a></li>
+                    
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li class="nav-item mission-nav"><a href="#" onclick='missionClick();return false;'>管理任务</a></li>
+                    <li class="nav-item bug-nav"><a href="#" onclick='bugClick();return false;'>管理BUG</a></li>
+                    <li class="nav-item member-nav"><a href="#" onclick='memberClick();return false;'>管理人员</a></li>
+                </ul>
+            </div>
+
+
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <div class="item-content item-project">
+                    <h2 class="sub-header">项目信息</h2>
+                    <input type="hidden" id="pid" value='1505358650'>
+                </div>
+                
+                <div class="item-content item-version">
+                    <h2 class="sub-header">管理版本</h2>
+                    <div id="versiontoolbar" class="btn-group">
+                        <button id="btn_add" type="button" class="btn btn-default" data-toggle="modal" data-target="#addVersionModal">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增版本
+                        </button>
+                        <button id="btn_update" type="button" class="btn btn-default" data-toggle="modal" data-target="#updateVersionModal">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改版本
+                        </button>
+                        <button id="btn_add_vmession" type="button" class="btn btn-default" data-toggle="modal" data-target="#addMissionModal">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增任务
+                        </button>
+                    </div>
+                    
+                    <table id="versionList"></table>
+
+                    <div class="modal fade" id="addVersionModal" tabindex="-1" role="dialog" >
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">新增版本</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10">
+                                            <form class="form-horizontal" id="addVersionFrom">
+                                                <div class="form-group ">
+                                                    <label for="v4pjID" class="col-sm-2 control-label">项目ID</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="v4pjName" placeholder="项目名称" readonly>
+                                                        <input type="hidden" class="form-control" id="v4pjID" placeholder="项目ID">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="vName" class="col-sm-2 control-label">版本代号</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="vName" placeholder="版本代号">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="vpctime" class="col-sm-2 control-label">计划开始</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="vpctime" placeholder="计划开始">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="vpetime" class="col-sm-2 control-label">计划结束</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="vpetime" placeholder="计划结束">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="vdesc" class="col-sm-2 control-label">版本描述</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control" rows="5" id="vdesc" placeholder="版本描述"></textarea>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-1">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" onclick="addVersion();">提交</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="updateVersionModal" tabindex="-1" role="dialog" >
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">修改版本</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10"></div>
+                                        <div class="col-md-1"></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" >提交</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="addMissionModal" tabindex="-1" role="dialog" >
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">新增任务</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10"></div>
+                                        <div class="col-md-1"></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" >提交</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>     
+                </div>
+
+                <div class="item-content item-demand">
+                    <h2 class="sub-header">管理需求</h2>
+
+                </div>
+
+                <div class="item-content item-mission">
+                    <h2 class="sub-header">管理任务</h2>
+
+                </div>
+
+                <div class="item-content item-bug">
+                    <h2 class="sub-header">管理BUG</h2>
+
+                </div>
+
+                <div class="item-content item-member">
+                    <h2 class="sub-header">管理人员</h2>
+
+                </div>
+                </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- table -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+
+    <script>
+        //界面显示控制
+
+        function projectClick() {
+            $(".nav-item").removeClass('active');
+            $(".project-nav").addClass('active');
+            $('.item-content').hide();
+            $('.item-project').show();
+        }
+        function versionClick() {
+            $(".nav-item").removeClass('active');
+            $(".version-nav").addClass('active');
+            $('.item-content').hide();
+            $('.item-version').show();
+
+            var pid = $('#pid').val();
+            //销毁表格
+            $("#versionList").bootstrapTable('destroy'); 
+            //新建表格
+            var vtable = new Versiontable();
+            vtable.Init(pid);
+        }
+        function demandClick() {
+            $(".nav-item").removeClass('active');
+            $(".demand-nav").addClass('active');
+            $('.item-content').hide();
+            $('.item-demand').show();
+        }
+        function missionClick() {
+            $(".nav-item").removeClass('active');
+            $(".mission-nav").addClass('active');
+            $('.item-content').hide();
+            $('.item-mission').show();
+        }
+        function bugClick() {
+            $(".nav-item").removeClass('active');
+            $(".bug-nav").addClass('active');
+            $('.item-content').hide();
+            $('.item-bug').show();
+        }
+        function memberClick() {
+            $(".nav-item").removeClass('active');
+            $(".member-nav").addClass('active');
+            $('.item-content').hide();
+            $('.item-member').show();
+        }
+    </script>
+
+    <script>
+        $(function () {
+            versionClick();
+        });
+    </script>
+
+    <script>
+    //项目信息   
+    </script>
+
+    <script>
+        //管理版本
+        function Versiontable() {
+            this.Init = function (pid) {
+                $('#versionList').bootstrapTable({
+                    url: '/project/getAllversion',
+                    method: 'get',
+                    queryParams: function queryParams(params) {   //设置查询参数  
+                        var param = {
+                            limit: params.limit,    //页面大小
+                            offset: params.offset,  //页码
+                            order: params.order,     //排序
+                            pid: pid  //所属项目
+                        };
+                        return param;
+                    },
+                    toolbar: '#versiontoolbar',              //工具按钮用哪个容器
+                    checkboxHeader: false,              //设置false 将在列头隐藏check-all checkbox .
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                      //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 20, 50],             //可供选择的每页的行数（*）
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    minimumCountColumns: 2,             //最少允许的列数
+                    clickToSelect: true,                //是否启用点击选中行
+                    singleSelect: true,                  //只能选中一行
+                    height: 550,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                    columns: [
+                        {
+                            checkbox: true
+                        },
+                        {
+                            field: 'id',
+                            title: '版本编号'
+                        }, {
+                            field: 'name',
+                            title: '版本代号',
+                        }, {
+                            field: 'state',
+                            title: '版本状态',
+                            formatter: function (data) {
+                                if (data == 0) {
+                                    return "未开始";
+                                } else if (data == 1) {
+                                    return "进行中";
+                                } else if (data == 2) {
+                                    return "已完成";
+                                } else if (data == 3) {
+                                    return "版本暂停";
+                                } else if (data == 4) {
+                                    return "版本作废";
+                                }
+                            }
+                        }, {
+                            field: 'v_desc',
+                            title: '版本描述'
+                        }, {
+                            field: 'pctime',
+                            title: '计划开始时间',
+                            formatter: function (data) {
+                                var timestr = new Date(data * 1000).Format("yyyy-MM-dd");
+
+                                return timestr;
+                            }
+                        }, {
+                            field: 'petime',
+                            title: '计划结束时间',
+                            formatter: function (data) {
+                                var timestr = new Date(data * 1000).Format("yyyy-MM-dd");
+
+                                return timestr;
+                            }
+                        }]
+                });
+            }
+        }
+
+        function addVersion() {
+            var v4pjID = $('#v4pjID').val();
+            var vName = $('#vName').val();
+            var vpctime = $('#vpctime').val();
+            var vpetime = $('#vpetime').val();
+            var vdesc = $('#vdesc').val();
+
+            var submitData = {
+                'pid': v4pjID,
+                'vName': vName,
+                'vpctime': vpctime,
+                'vpetime': vpetime,
+                'vdesc': vdesc,
+            };
+
+            $.ajax({
+                url: '/project/addVersion',
+                type: 'POST',
+                async: true,
+                dataType: 'json',
+                data: submitData,
+                success: function (result) {
+                    if (result.success) {
+                        //关闭窗口
+                        $('#versionModal').modal('hide');
+                        //刷新列表
+                        $("#versionList").bootstrapTable('refresh');
+
+                    } else {
+                        alert(result.msg);
+                    }
+                },
+                error: function (error) {
+                    alert('系统异常，请稍后再添加');
+                }
+            });
+
+        }
+    </script>
+
+
+    <script> 
+    //管理需求
+    </script>
+
+    <script>
+    //管理任务
+    </script>
+
+    <script>
+    //管理BUG
+    </script>
+
+    <script>
+    //管理人员
+    </script>
+</body>
+
+</html>

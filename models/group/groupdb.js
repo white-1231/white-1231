@@ -1,5 +1,4 @@
 //引用
-var  crypto = require('../../utils/cryptoUtils');
 var  mysqlpool = require('../../utils/mysqlPool');
 
 function query(sql, callback) {
@@ -43,15 +42,17 @@ exports.add_group = function(pid,gid,uid,callback){
     var sql='INSERT INTO t_group (id,uid,pid,gid) VALUES ';
     var values ='';
 
-
     for(var i = 0;i<uid.length ;i++){
-        values += '('+ 0+ ' ,'+ uid[0] + ',' + pid +','+gid +')';
+        values += '('+ 0+ ' ,'+ uid[i] + ',' + pid +','+gid +')';
         if( i == (uid.length -1)){
             sql += values;
         }else{
             values +=',' ;
         }
     };
+
+    console.log(sql);
+
     query(sql, function (err, rows, fields) {
         if (err) {
             callback(false);

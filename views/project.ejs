@@ -25,115 +25,73 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">项目1 </a></li>
-            <li><a href="#">项目2</a></li>
-            <li><a href="#">项目3</a></li>
-            <li><a href="#">项目4</a></li>
-            <li><a href="#">项目5</a></li>
-            <li><a href="#">项目6</a></li>
+            <!-- <li class="active"><a href="#">项目1 </a></li>
+            <li><a href="#">项目2</a></li> -->
+            <% for(var i=0;i < pjarr.length ;i++){
+                 if(pjarr[i].id == selectpj){  %> 
+            <li class="active"> 
+                <a href="/project?pid=<%=pjarr[i].id %>"><%=pjarr[i].name %> </a></li>  
+            <% } else { %> 
+            <li>        
+                <a href="/project?pid=<%=pjarr[i].id %>"><%=pjarr[i].name %> </a></li>   
+            <% }} %>
+            
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h2 class="sub-header"><a href='/home' title="点击获取此项目详细信息">项目1</a> </button></h2>
+            <h2 class="sub-header"><a href='/project/pjdetails?pid=<%=selectpj %>' title="点击获取此项目详细信息">项目成员</a> </button></h2>
 
             <div class="row ">
+                <% for(var i = 0;i< grouparr.length ; i++){ %>
+
                 <div class="col-xs-3 col-sm-1 placeholder">
                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive"
                         alt="Generic placeholder thumbnail">
-                    <h5>教练</h5>
-                    <span class="text-muted">齐达内</span>
+                    <h5> <%= groupname[grouparr[i].gid] %> </h5>
+                    <span class="text-muted"><%= grouparr[i].nickname %></span>
                 </div>
-                <div class="col-xs-3 col-sm-1 placeholder">
-                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive"
-                        alt="Generic placeholder thumbnail">
-                    <h5>队长</h5>
-                    <span class="text-muted">拉莫斯</span>
-                </div>
-                <div class="col-xs-3 col-sm-1 placeholder">
-                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive"
-                        alt="Generic placeholder thumbnail">
-                    <h5>队副</h5>
-                    <span class="text-muted">马塞洛</span>
-                </div>
-                <div class="col-xs-3 col-sm-1 placeholder">
-                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive"
-                        alt="Generic placeholder thumbnail">
-                    <h5>队副</h5>
-                    <span class="text-muted">C罗</span>
-                </div>
-                <div class="col-xs-3 col-sm-1 placeholder">
-                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive"
-                        alt="Generic placeholder thumbnail">
-                    <h5>队员</h5>
-                    <span class="text-muted">贝尔</span>
-                </div>
-                <div class="col-xs-3 col-sm-1 placeholder">
-                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive"
-                        alt="Generic placeholder thumbnail">
-                    <h5>队员</h5>
-                    <span class="text-muted">莫德里奇</span>
-                </div>
-                <div class="col-xs-3 col-sm-1 placeholder">
-                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive"
-                        alt="Generic placeholder thumbnail">
-                    <h5>队员</h5>
-                    <span class="text-muted">克罗斯</span>
-                </div>
-                <div class="col-xs-3 col-sm-1 placeholder">
-                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive"
-                        alt="Generic placeholder thumbnail">
-                    <h5>队员</h5>
-                    <span class="text-muted">卡塞米罗</span>
-                </div>
-                <div class="col-xs-3 col-sm-1 placeholder">
-                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive"
-                        alt="Generic placeholder thumbnail">
-                    <h5>队员</h5>
-                    <span class="text-muted">本泽马</span>
-                </div>
+                <% } %>
             </div>
 
-            <h2 class="sub-header">项目版本</h2>
+            <h2 class="sub-header"><a href='/project/pjdetails?pid=<%=selectpj %>' title="点击获取此项目详细信息">项目版本</a></h2>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Header</th>
-                            <th>Header</th>
-                            <th>Header</th>
-                            <th>Header</th>
+                            <th>版本名称</th>
+                            <th>计划开始时间</th>
+                            <th>计划结束时间</th>
+                            <th>版本状态</th>
+                            <th>完成度</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <% for(var i=0;i< 3;i++){
+                            if(versionarr[i] != null){ %>
                         <tr>
-                            <td>1,001</td>
-                            <td>Lorem</td>
-                            <td>ipsum</td>
-                            <td>dolor</td>
-                            <td>sit</td>
-                        </tr>
-                        <tr>
-                            <td>1,001</td>
-                            <td>Lorem</td>
-                            <td>ipsum</td>
-                            <td>dolor</td>
-                            <td>sit</td>
+                            <td><%= versionarr[i].name %> </td>
+                            <td>
+                                <%= new Date((versionarr[i].pctime)*1000).Format("yyyy-MM-dd") %>
+                            </td>
+                            <td><%= new Date((versionarr[i].petime)*1000).Format("yyyy-MM-dd") %></td>
+                            <td><%= statename[versionarr[i].state] %></td>
+                            <td>0.8</td>
                         </tr>
 
+                        <% }} %>
                     </tbody>
                 </table>
             </div>
 
             <h2 class="sub-header">详细</h2>
-            <div class="col-xs-12 col-sm-4 ">
+            <div class="col-xs-12 col-sm-6 ">
                     <h5 class="sub-header">临近到期任务</h5>
                     <ul>
                         <li><a>js补充</a></li>
                         <li><a>ejs 填充</a></li>
                     </ul>
             </div>
-            <div class="col-xs-12 col-sm-4 ">
+            <div class="col-xs-12 col-sm-6 ">
                     <h5 class="sub-header">BUG列表</h5>
                     <div class="table-responsive">
                             <table class="table table-striped">
@@ -158,31 +116,6 @@
                             </table>
                         </div>
             </div>
-            <div class="col-xs-12 col-sm-4 ">
-                <h5 class="sub-header">工作用时</h5>
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Header</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1,001</td>
-                                <td>Loremghjkl</td>
-                               
-                            </tr>
-                            <tr>
-                                <td>1,001</td>
-                                <td>Lorem</td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
         </div>
       </div>
     </div>
@@ -190,6 +123,5 @@
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-  
 
 </body></html>
