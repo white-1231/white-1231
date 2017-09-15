@@ -100,7 +100,7 @@ exports.get_allMS_bypj = function (order, offset, limit, pid, callback) {
         limit = 10;
     }
 
-    var sql = 'SELECT id,name,state,status,pid,did,vid,m_desc,type,owner,pstime,petime,astime,aetime FROM t_mission where pid = "{3}" ORDER BY id {0} LIMIT {1},{2} ';
+    var sql = 'SELECT id,name,state,status,pid,did,vid,m_desc,type,owner,pstime,petime,astime,aetime FROM t_mission where pid = "{3}" ORDER BY state {0} LIMIT {1},{2} ';
     sql = sql.format(order, parseInt(offset), parseInt(limit) + parseInt(offset), pid);
     console.log(sql);
 
@@ -118,4 +118,41 @@ exports.get_allMS_bypj = function (order, offset, limit, pid, callback) {
         }
     });
 
+}
+
+exports.update_msByid = function (id,pid,did,vid,name,state,desc,type,pstime,petime,astime,aetime,callback){
+    callback = callback == null ? noCallback : callback;
+
+    if (id == null || id == undefined || id == '') {
+        callback(false);
+        return;
+    }
+    if (pid == null || pid == undefined || pid == '') {
+        callback(false);
+        return;
+    }
+    if (vid == null || vid == undefined || vid == '') {
+        callback(false);
+        return;
+    }
+
+    if (did == null || did == undefined || did == '') {
+        did = -1;
+    }
+
+    var sql = 'UPDATE t_mission SET pid="{0}", did="{1}", vid={2}, name="{3}", state={4}, m_desc="{5}", type={6}, pstime={7}, petime={8}, astime={9}, aetime={10} WHERE id={11} ;';
+    var sql = sql.format(pid,did,vid,name,state,desc,type,pstime,petime,astime,aetime,id);
+    console.log(sql);
+
+    query(sql, function(err, rows, fields) {
+        if (err) {
+            callback(false);
+            throw err; 
+        }
+        else{
+            callback(true);            
+        }
+    });
+
+    
 }

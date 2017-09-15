@@ -414,6 +414,9 @@
                                                     <label for="msmddesc" class="col-sm-2 control-label">任务描述</label>
                                                     <div class="col-sm-8">
                                                         <textarea class="form-control" rows="5" id="msmddesc" placeholder="任务描述"></textarea>
+                                                        <div class="hidden">
+                                                            <textarea class="form-control" rows="5" id="msmdobj" placeholder="任务对象JSON" disabled="disabled"></textarea>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form> 
@@ -857,6 +860,32 @@
                             field: 'owner',
                             title: '所属员工',
                             visible:false
+                        },{
+                            field: 'astime',
+                            title: '实际开始时间',
+                            formatter: function (data) {
+                                if(data == -1){
+                                    return '-';
+                                }else{
+                                    var timestr = new Date(data * 1000).Format("yyyy-MM-dd");
+    
+                                    return timestr;
+                                }
+                            },
+                            visible:false
+                        },{
+                            field: 'aetime',
+                            title: '实际结束时间',
+                            formatter: function (data) {
+                                if(data == -1){
+                                    return '-';
+                                }else{
+                                    var timestr = new Date(data * 1000).Format("yyyy-MM-dd");
+    
+                                    return timestr;
+                                }
+                            },
+                            visible:false
                         }]
                 });
             }
@@ -887,10 +916,13 @@
                 modal.find('#msmdpstime').val(selectData[0].pstime);
                 modal.find('#msmdpetime').val(selectData[0].petime);
                 modal.find('input[name="msmdtype"][value="'+selectData[0].type+'"]').attr("checked",true);  
-                modal.find('input[name="msmdtype"][value="'+selectData[0].state+'"]').attr("checked",true);  
+                modal.find('input[name="msmdstate"][value="'+selectData[0].state+'"]').attr("checked",true);  
                 modal.find('#msmddesc').val(selectData[0].m_desc);
+
                 $('#mddmlist').selectpicker('val', selectData[0].did);
                 $('#mdverslist').selectpicker('val', selectData[0].vid);
+
+                modal.find('#msmdobj').val(JSON.stringify(selectData[0]));
 
             }else{
                 return false;
@@ -943,6 +975,71 @@
                         alert('添加成功');
                         //关闭窗口
                         $('#addmsModal').modal('hide');
+                        //刷新列表
+                        $("#msList").bootstrapTable('refresh');
+                    } else {
+                        alert(result.msg);
+                    }
+                },
+                error: function (error) {
+                    alert('系统异常，请稍后注册');
+                }
+            });
+        }
+
+        //修改任务
+        function msMdCommit(){
+            var msmdid = $('#msmdid').val();
+            var msmdname = $('#msmdname').val();
+            var msmdpstime = $('#msmdpstime').val();
+            var msmdpetime = $('#msmdpetime').val();
+            var msmdtype = $("input[name='msmdtype']:checked").val();
+            var msmdstate = $("input[name='msmdstate']:checked").val();
+            var msmdvid = $('#mdverslist').val();
+            var msmddid = $('#mddmlist').val();
+            var msmddesc = $('#msmddesc').val();
+            var mspid = $('#pid').val();
+            var oldobj = $('#msmdobj').val();
+
+            //不可为空
+            if(msmdvid == null){
+                alert('请选择所属版本！');
+                return ;
+            }
+            //id 丢失
+            if(msmdid == null ||msmdid == '' || msmdid == undefined){
+                alert('页面信息缺失，请关闭之后，重新修改！');
+                return ;
+            }
+
+            var submitData = {
+                'id':msmdid,
+                'name': msmdname,
+                'pstime': msmdpstime,
+                'petime': msmdpetime,
+                'type': msmdtype,
+                'state':msmdstate,
+                'vid': msmdvid,
+                'did': msmddid,
+                'desc': msmddesc,
+                'pid': mspid,
+                'oldobj':oldobj
+            };
+
+            $.ajax({
+                url: '/mission/update',
+                type: 'POST',
+                async: true,
+                dataType: 'json',
+                data: submitData,
+                success: function (result) {
+
+                    if (result.success) {
+                        alert('修改成功！');
+                        //关闭窗口
+                        $('#updatemsModal').modal('hide');
+                        //刷新列表
+                        $("#msList").bootstrapTable('refresh');
 
                     } else {
                         alert(result.msg);
