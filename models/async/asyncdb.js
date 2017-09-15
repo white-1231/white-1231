@@ -73,3 +73,58 @@ exports.getVersion_byPid = function (pid) {
     });
 
 }
+
+/**
+ * 根据项目id，查询版本id，名称
+ */
+exports.getvs_bypid = function (pid) {
+    //TODO  根据版本状态筛选
+
+    return new Promise(function (resolve, reject) {
+
+        if (pid == null || pid == undefined || pid == '') {
+            resolve([]);
+        }
+
+        var sql = 'SELECT id,name FROM t_version where pid = "{0}" ORDER BY pctime desc ';
+        sql = sql.format(pid);
+        console.log(sql);
+
+        query(sql, function (err, rows, fields) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(rows);
+            }
+        });
+
+    });
+}
+
+/**
+ * 根据项目id，查询需求id，名称
+ */
+exports.getdm_bypid = function (pid) {
+
+    return new Promise(function (resolve, reject) {
+
+        if (pid == null || pid == undefined || pid == '') {
+            resolve([]);
+        }
+
+        var sql = 'SELECT id,name FROM t_demand where pid = "{0}" and state < 2 ';
+        sql = sql.format(pid);
+        console.log(sql);
+
+        query(sql, function (err, rows, fields) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(rows);
+            }
+        });
+
+    });
+}

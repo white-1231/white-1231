@@ -85,7 +85,7 @@ exports.get_allversion_bypj = function (order, offset, limit, pid, callback) {
     }
 
     var sql = 'SELECT id,name,state,v_desc,pid,pctime,petime,actime,aetime FROM t_version where pid = "{3}" ORDER BY id {0} LIMIT {1},{2} ';
-    sql = sql.format(order, parseInt(offset),parseInt(limit+offset),pid);
+    sql = sql.format(order, parseInt(offset),parseInt(limit) + parseInt(offset),pid);
     console.log(sql);
 
     query(sql, function (err, rows, fields) {
@@ -104,9 +104,14 @@ exports.get_allversion_bypj = function (order, offset, limit, pid, callback) {
 
 }
 
-exports.get_dmtotal_bypj = function (pid,callback) {
+exports.get_vstotal_bypj = function (pid,callback) {
 
     callback = callback == null ? noCallback : callback;
+    
+    if (pid == null || pid == '' || pid == undefined) {
+        callback(0);
+        return;
+    }
 
     var sql = 'SELECT count(id)as count FROM t_version where pid = "{0}" ';
     sql =sql.format(pid);

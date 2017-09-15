@@ -16,6 +16,8 @@
     <link rel='stylesheet' href='/stylesheets/dashboard.css' />
     <!-- table -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+    <!--select -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
 
     <style>
         .item-content {
@@ -60,7 +62,7 @@
                         <button id="btn_update" type="button" class="btn btn-default" data-toggle="modal" data-target="#updateVersionModal">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改版本
                         </button>
-                        <button id="btn_add_vmession" type="button" class="btn btn-default" data-toggle="modal" data-target="#addMissionModal">
+                        <button id="btn_add_vmession" type="button" class="btn btn-default" data-toggle="modal" data-target="#addVMissionModal">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增任务
                         </button>
                     </div>
@@ -148,7 +150,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="addMissionModal" tabindex="-1" role="dialog" >
+                    <div class="modal fade" id="addVMissionModal" tabindex="-1" role="dialog" >
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -159,12 +161,61 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-1"></div>
-                                        <div class="col-md-10"></div>
+                                        <div class="col-md-10">
+                                            <form class="form-horizontal" id="vamFrom">
+                                                    <div class="form-group ">
+                                                        <label for="vamName" class="col-sm-2 control-label">任务名称</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" id="vamName" placeholder="任务名称" >
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="vampstime" class="col-sm-2 control-label">计划开始</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" id="vampstime" placeholder="计划开始">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="vampetime" class="col-sm-2 control-label">计划结束</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" id="vampetime" placeholder="计划结束">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="vamtype" class="col-sm-2 control-label">任务类型</label>
+                                                        <div class="col-sm-8">
+                                                            <label class="radio-inline">
+                                                                <input type="radio" name="vamtype" id="vamtype" value="3" checked> 开发
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input type="radio" name="vamtype" id="vamtype" value="4"> 测试
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input type="radio" name="vamtype" id="vamtype" value="5"> 产品/运营/需求
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="vamvid" class="col-sm-2 control-label">所属版本</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" id="vamVNAME" placeholder="所属版本名称" readonly>
+                                                            <input type="hidden" class="form-control" id="vamvid" placeholder="所属版本ID">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="vamDesc" class="col-sm-2 control-label">任务描述</label>
+                                                        <div class="col-sm-8">
+                                                            <textarea class="form-control" rows="5" id="vamDesc" placeholder="任务描述"></textarea>
+                                                        </div>
+                                                    </div>
+                                            </form>
+
+                                        </div>
                                         <div class="col-md-1"></div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" >提交</button>
+                                    <button type="button" class="btn btn-primary" onclick="vamCommit();" >提交</button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                                 </div>
                             </div>
@@ -179,6 +230,226 @@
 
                 <div class="item-content item-mission">
                     <h2 class="sub-header">管理任务</h2>
+                    <div id="missiontoolbar" class="btn-group">
+                        <button id="btn_add_mission" type="button" class="btn btn-default" data-toggle="modal" data-target="#addmsModal">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增任务
+                        </button>
+                        <button id="btn_update_mission" type="button" class="btn btn-default" data-toggle="modal" data-target="#updatemsModal">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改任务
+                        </button>
+                        <button id="btn_del_mission" type="button" class="btn btn-default" data-toggle="modal" data-target="#delmsModal">
+                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>删除任务
+                        </button>
+                    </div>
+
+                    <table id="msList"></table>
+
+                    <div class="modal fade" id="addmsModal" tabindex="-1" role="dialog" >
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">新增任务</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10">
+                                            <form class="form-horizontal" id="addMSFrom">
+                                                <div class="form-group ">
+                                                    <label for="msname" class="col-sm-2 control-label">任务名称</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="msname" placeholder="任务名称">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="mspstime" class="col-sm-2 control-label">计划开始</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="mspstime" placeholder="计划开始">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="mspetime" class="col-sm-2 control-label">计划结束</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="mspetime" placeholder="计划结束">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="mstype" class="col-sm-2 control-label">任务类型</label>
+                                                    <div class="col-sm-8">
+                                                        <label class="radio-inline">
+                                                                    <input type="radio" name="mstype" id="mstype" value="3" checked> 开发
+                                                                </label>
+                                                        <label class="radio-inline">
+                                                                    <input type="radio" name="mstype" id="mstype" value="4"> 测试
+                                                                </label>
+                                                        <label class="radio-inline">
+                                                                    <input type="radio" name="mstype" id="mstype" value="5"> 产品/运营/需求
+                                                                </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="msvid" class="col-sm-2 control-label">所属版本</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="verslist" title="请选择所属版本" name="verslist" class="selectpicker show-tick form-control" data-live-search="false">
+                                                            <% for (var i=0; i<vslist.length; i++) { %>
+                                                                <option value="<%=vslist[i].id %>" > <%=vslist[i].name %></option>    
+                                                            <% } %>  
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="msdid" class="col-sm-2 control-label">所属需求</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="dmlist" title="请选择所属需求" name="dmlist" class="selectpicker show-tick form-control" data-live-search="false">
+                                                            <% for (var i=0; i<dmlist.length; i++) { %>
+                                                                <option value="<%=dmlist[i].id %>" > <%=dmlist[i].name %></option>    
+                                                            <% } %>     
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="msdesc" class="col-sm-2 control-label">任务描述</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control" rows="5" id="msdesc" placeholder="任务描述"></textarea>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" onclick="msAddCommit();">提交</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="updatemsModal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">修改任务</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10">
+                                            <form class="form-horizontal" id="updateMSFrom">
+                                                <div class="form-group ">
+                                                    <label for="msmdname" class="col-sm-2 control-label">任务名称</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="msmdname" placeholder="任务名称">
+                                                        <input type="hidden" class="form-control" id="msmdid" placeholder="任务编号">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="msmdpstime" class="col-sm-2 control-label">计划开始</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="msmdpstime" placeholder="计划开始">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="msmdpetime" class="col-sm-2 control-label">计划结束</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="msmdpetime" placeholder="计划结束">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="msmdtype" class="col-sm-2 control-label">任务类型</label>
+                                                    <div class="col-sm-8">
+                                                        <label class="radio-inline">
+                                                                    <input type="radio" name="msmdtype" id="msmdtype" value="3" > 开发
+                                                                </label>
+                                                        <label class="radio-inline">
+                                                                    <input type="radio" name="msmdtype" id="msmdtype" value="4"> 测试
+                                                                </label>
+                                                        <label class="radio-inline">
+                                                                    <input type="radio" name="msmdtype" id="msmdtype" value="5"> 产品/运营/需求
+                                                                </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="msmdstate" class="col-sm-2 control-label">任务状态</label>
+                                                    <div class="col-sm-8">
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="msmdstate" id="msmdstate" value="0" > 正常
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="msmdstate" id="msmdstate" value="1"> 延期
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="msmdstate" id="msmdstate" value="2"> 异常
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="msmdstate" id="msmdstate" value="2"> 过期
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="msmdvid" class="col-sm-2 control-label">所属版本</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="mdverslist" title="请选择所属版本" name="mdverslist" class="selectpicker show-tick form-control" data-live-search="false">
+                                                            <% for (var i=0; i<vslist.length; i++) { %>
+                                                                <option value="<%=vslist[i].id %>" > <%=vslist[i].name %></option>    
+                                                            <% } %>  
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="msmddid" class="col-sm-2 control-label">所属需求</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="mddmlist" title="请选择所属需求" name="mddmlist" class="selectpicker show-tick form-control" data-live-search="false">
+                                                            <% for (var i=0; i<dmlist.length; i++) { %>
+                                                                <option value="<%=dmlist[i].id %>" > <%=dmlist[i].name %></option>    
+                                                            <% } %>     
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="msmddesc" class="col-sm-2 control-label">任务描述</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control" rows="5" id="msmddesc" placeholder="任务描述"></textarea>
+                                                    </div>
+                                                </div>
+                                            </form> 
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" onclick="msMdCommit();">提交</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="delmsModal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">删除任务</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10"></div>
+                                        <div class="col-md-1"></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary">提交</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
 
@@ -197,6 +468,8 @@
 
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--select -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
     <!-- table -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
@@ -210,6 +483,7 @@
             $('.item-content').hide();
             $('.item-project').show();
         }
+        
         function versionClick() {
             $(".nav-item").removeClass('active');
             $(".version-nav").addClass('active');
@@ -223,35 +497,51 @@
             var vtable = new Versiontable();
             vtable.Init(pid);
         }
+
         function demandClick() {
             $(".nav-item").removeClass('active');
             $(".demand-nav").addClass('active');
             $('.item-content').hide();
             $('.item-demand').show();
         }
+
         function missionClick() {
             $(".nav-item").removeClass('active');
             $(".mission-nav").addClass('active');
             $('.item-content').hide();
             $('.item-mission').show();
+
+            var pid = $('#pid').val();
+            //销毁表格
+            $("#versionList").bootstrapTable('destroy'); 
+            //新建表格
+            var mtable = new Messiontable();
+            mtable.Init(pid);
         }
+
         function bugClick() {
             $(".nav-item").removeClass('active');
             $(".bug-nav").addClass('active');
             $('.item-content').hide();
             $('.item-bug').show();
         }
+
         function memberClick() {
             $(".nav-item").removeClass('active');
             $(".member-nav").addClass('active');
             $('.item-content').hide();
             $('.item-member').show();
         }
+
+        //清除select 选择方法
+        function cleanSelect(){
+            $('.selectpicker').selectpicker('deselectAll');
+        }
     </script>
 
     <script>
         $(function () {
-            versionClick();
+            missionClick();
         });
     </script>
 
@@ -261,6 +551,8 @@
 
     <script>
         //管理版本
+
+        //版本列表
         function Versiontable() {
             this.Init = function (pid) {
                 $('#versionList').bootstrapTable({
@@ -341,53 +633,327 @@
             }
         }
 
+        //添加版本
         function addVersion() {
-            var v4pjID = $('#v4pjID').val();
-            var vName = $('#vName').val();
-            var vpctime = $('#vpctime').val();
-            var vpetime = $('#vpetime').val();
-            var vdesc = $('#vdesc').val();
+            //TODO
+        }
 
+        //修改版本信息
+        function updateVersion(){
+            //TODO
+        }
+
+        //添加任务，版本页面
+        function addVMission(){
+            //TODO
+        }
+
+        //添加版本模态框赋值
+        $('#addVersionModal').on('show.bs.modal', function (event) {
+            //TODO
+        });
+
+        //修改版本模态框赋值
+        $('#updateVersionModal').on('show.bs.modal', function (event) {
+            //TODO
+        });
+
+        //添加任务模态框赋值
+        $('#addVMissionModal').on('show.bs.modal', function (event) {
+            var $vtable = $('#versionList');
+            var selectData = $vtable.bootstrapTable('getSelections');
+            var modal = $(this);
+            //是否有选择用户判断
+            var flag = selectData == '';
+
+            //表单重置
+            document.getElementById('vamFrom').reset();
+
+            if ((!flag) && selectData[0].id != null) {
+                modal.find('#vamVNAME').val(selectData[0].name);
+                modal.find('#vamvid').val(selectData[0].id);
+            }else{
+                return false;
+            }
+        });
+
+        function vamCommit(){
+            var vamName = $('#vamName').val();
+            var vampstime = $('#vampstime').val();
+            var vampetime = $('#vampetime').val();
+            var vamtype = $("input[name='vamtype']:checked").val();
+            var vamvid = $('#vamvid').val();
+            var vamDesc = $('#vamDesc').val();
+            var vampid = $('#pid').val();
+
+            //暂无时间控件
+            vampstime = Math.floor(new Date().getTime()/1000);
+            vampetime = vampstime + 86400;
+            
             var submitData = {
-                'pid': v4pjID,
-                'vName': vName,
-                'vpctime': vpctime,
-                'vpetime': vpetime,
-                'vdesc': vdesc,
+                'name': vamName,
+                'pstime': vampstime,
+                'petime': vampetime,
+                'type': vamtype,
+                'vid': vamvid,
+                'desc': vamDesc,
+                'pid':vampid
             };
 
             $.ajax({
-                url: '/project/addVersion',
+                url: '/mission/add',
                 type: 'POST',
                 async: true,
                 dataType: 'json',
                 data: submitData,
                 success: function (result) {
-                    if (result.success) {
-                        //关闭窗口
-                        $('#versionModal').modal('hide');
-                        //刷新列表
-                        $("#versionList").bootstrapTable('refresh');
 
+                    if (result.success) {
+                        alert('添加成功');
+                        //关闭窗口
+                        $('#addVMissionModal').modal('hide');
+                        
                     } else {
                         alert(result.msg);
                     }
                 },
                 error: function (error) {
-                    alert('系统异常，请稍后再添加');
+                    alert('系统异常，请稍后注册');
                 }
             });
-
-        }
+        };
     </script>
-
 
     <script> 
     //管理需求
     </script>
 
     <script>
-    //管理任务
+        //管理任务
+
+        //任务列表
+        function Messiontable(){
+            this.Init = function(pid){
+                $('#msList').bootstrapTable({
+                    url: '/mission/getMS',
+                    method: 'get',
+                    queryParams: function queryParams(params) {   //设置查询参数  
+                        var param = {
+                            limit: params.limit,    //页面大小
+                            offset: params.offset,  //页码
+                            order: params.order,     //排序
+                            pid: pid  //所属项目
+                        };
+                        return param;
+                    },
+                    toolbar: '#missiontoolbar',         //工具按钮用哪个容器
+                    checkboxHeader: false,              //设置false 将在列头隐藏check-all checkbox .
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                      //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 20, 50],             //可供选择的每页的行数（*）
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    minimumCountColumns: 2,             //最少允许的列数
+                    clickToSelect: true,                //是否启用点击选中行
+                    singleSelect: true,                  //只能选中一行
+                    height: 550,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                    columns: [
+                        {
+                            checkbox: true
+                        },{
+                            field: 'name',
+                            title: '任务名称',
+                        },{
+                            field: 'state',
+                            title: '任务状态',
+                            formatter: function (data) {
+                                if (data == 0) {
+                                    return "正常";
+                                } else if (data == 1) {
+                                    return "延期";
+                                } else if (data == 2) {
+                                    return "异常";
+                                } else if (data == 3) {
+                                    return "过期";
+                                } 
+                            }
+                        }, {
+                            field: 'status',
+                            title: '任务进度',
+                            formatter: function (data) {
+                                if (data == 0) {
+                                    return "未开始";
+                                } else if (data == 1) {
+                                    return "进行中";
+                                } else if (data == 2) {
+                                    return "已完成";
+                                } else if (data == 3) {
+                                    return "暂停";
+                                } 
+                            }
+                        }, {
+                            field: 'type',
+                            title: '任务类型',
+                            formatter: function (data) {
+                                if (data == 3) {
+                                    return "开发";
+                                } else if (data == 4) {
+                                    return "测试";
+                                } else if (data == 5) {
+                                    return "产品/运营/需求";
+                                } 
+                            }
+                        }, {
+                            field: 'pstime',
+                            title: '计划开始时间',
+                            formatter: function (data) {
+                                if(data == -1){
+                                    return '-';
+                                }else{
+                                    var timestr = new Date(data * 1000).Format("yyyy-MM-dd");
+    
+                                    return timestr;
+                                }
+                            }
+                        }, {
+                            field: 'petime',
+                            title: '计划结束时间',
+                            formatter: function (data) {
+
+                                if(data == -1){
+                                    return '-'
+                                }else{
+                                    var timestr = new Date(data * 1000).Format("yyyy-MM-dd");
+    
+                                    return timestr;
+                                }
+
+                            }
+                        },{
+                            field: 'm_desc',
+                            title: '任务描述',
+                        },{
+                            field: 'id',
+                            title: '任务编号',
+                            visible:false
+                        }, {
+                            field: 'pid',
+                            title: '所属项目',
+                            visible:false
+                        },{
+                            field: 'did',
+                            title: '所属需求',
+                            visible:false
+                        },{
+                            field: 'vid',
+                            title: '所属版本',
+                            visible:false
+                        },{
+                            field: 'owner',
+                            title: '所属员工',
+                            visible:false
+                        }]
+                });
+            }
+        }
+
+         //创建任务模态框赋值
+         $('#addmsModal').on('show.bs.modal', function (event) {
+            cleanSelect();
+            document.getElementById("addMSFrom").reset()  
+        });
+
+        //创建任务模态框赋值
+        $('#updatemsModal').on('show.bs.modal', function (event) {
+            var $mtable = $('#msList');
+            var selectData = $mtable.bootstrapTable('getSelections');
+            var modal = $(this);
+
+            cleanSelect();
+            document.getElementById("updateMSFrom").reset();  
+
+            //是否有选择用户判断
+            var flag = selectData == '';
+
+            if ((!flag) && selectData[0].id != null) {
+               //个人信息赋值
+                modal.find('#msmdid').val(selectData[0].id);
+                modal.find('#msmdname').val(selectData[0].name);
+                modal.find('#msmdpstime').val(selectData[0].pstime);
+                modal.find('#msmdpetime').val(selectData[0].petime);
+                modal.find('input[name="msmdtype"][value="'+selectData[0].type+'"]').attr("checked",true);  
+                modal.find('input[name="msmdtype"][value="'+selectData[0].state+'"]').attr("checked",true);  
+                modal.find('#msmddesc').val(selectData[0].m_desc);
+                $('#mddmlist').selectpicker('val', selectData[0].did);
+                $('#mdverslist').selectpicker('val', selectData[0].vid);
+
+            }else{
+                return false;
+            }
+
+            
+        });
+
+        //添加任务
+        function msAddCommit() {
+            var msname = $('#msname').val();
+            var mspstime = $('#mspstime').val();
+            var mspetime = $('#mspetime').val();
+            var mstype = $("input[name='mstype']:checked").val();
+            var msvid = $('#verslist').val();
+            var msdid = $('#dmlist').val();
+            var msdesc = $('#msdesc').val();
+            var mspid = $('#pid').val();
+
+            //暂无时间控件
+            mspstime = Math.floor(new Date().getTime() / 1000);
+            mspetime = mspstime + 86400;
+
+            //不可为空
+            if(msvid == null){
+                alert('请选择所属版本！');
+                return ;
+            }
+        
+            var submitData = {
+                'name': msname,
+                'pstime': mspstime,
+                'petime': mspetime,
+                'type': mstype,
+                'vid': msvid,
+                'did': msdid,
+                'desc': msdesc,
+                'pid': mspid
+            };
+
+            $.ajax({
+                url: '/mission/add',
+                type: 'POST',
+                async: true,
+                dataType: 'json',
+                data: submitData,
+                success: function (result) {
+
+                    if (result.success) {
+                        alert('添加成功');
+                        //关闭窗口
+                        $('#addmsModal').modal('hide');
+
+                    } else {
+                        alert(result.msg);
+                    }
+                },
+                error: function (error) {
+                    alert('系统异常，请稍后注册');
+                }
+            });
+        }
+
     </script>
 
     <script>

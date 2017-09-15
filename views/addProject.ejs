@@ -70,7 +70,7 @@
                                             <button type="button" class="btn btn-default btn-block " disabled><b>PM</b></button>
                                         </div>
                                         <div class="col-xs-8">
-                                            <select id="pm_member" title="请选择项目负责人" name="usertype" class="selectpicker show-tick form-control" data-live-search="false">
+                                            <select id="pm_member" title="请选择项目负责人" name="pm_member" class="selectpicker show-tick form-control" data-live-search="false">
                                                 <% for (var i=0; i<group.pm.length; i++) { %>
                                                     <option value="<%=group.pm[i].id %>" > <%=group.pm[i].nickname %></option>    
                                                 <% } %>
@@ -85,7 +85,7 @@
                                             <button type="button" class="btn btn-default btn-block" disabled><b>DE</b></button>
                                         </div>
                                         <div class="col-xs-8">
-                                            <select id="de_member" title="请选择开发人员" name="usertype" class="selectpicker show-tick form-control" multiple data-live-search="false">
+                                            <select id="de_member" title="请选择开发人员" name="de_member" class="selectpicker show-tick form-control" multiple data-live-search="false">
                                                 <% for (var i=0; i<group.de.length; i++) { %>
                                                     <option value="<%=group.de[i].id %>" > <%=group.de[i].nickname %></option>    
                                                 <% } %>
@@ -100,7 +100,7 @@
                                             <button type="button" class="btn btn-default btn-block" disabled><b>TE</b></button>
                                         </div>
                                         <div class="col-xs-8">
-                                            <select id="te_member" title="请选择测试人员" name="usertype" class="selectpicker show-tick form-control" multiple data-live-search="false">
+                                            <select id="te_member" title="请选择测试人员" name="te_member" class="selectpicker show-tick form-control" multiple data-live-search="false">
                                                 <% for (var i=0; i< group.te.length; i++) { %>
                                                     <option value="<%=group.te[i].id %>" > <%=group.te[i].nickname %></option>    
                                                 <% } %>
@@ -115,7 +115,7 @@
                                             <button type="button" class="btn btn-default btn-block" disabled><b>DA</b></button>
                                         </div>
                                         <div class="col-xs-8">
-                                            <select id="da_member" title="请选择需求人员" name="usertype" class="selectpicker show-tick form-control" multiple data-live-search="false">
+                                            <select id="da_member" title="请选择需求人员" name="da_member" class="selectpicker show-tick form-control" multiple data-live-search="false">
                                                 <% for (var i=0; i<group.da.length; i++) { %>
                                                     <option value="<%=group.da[i].id %>" > <%=group.da[i].nickname %></option>    
                                                 <% } %>

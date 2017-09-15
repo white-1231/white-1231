@@ -93,7 +93,7 @@ exports.get_allpj_bypage = function (order, offset, limit, callback) {
     }
 
     var sql = 'SELECT id,name,state,p_desc,creattime,endtime FROM t_project ORDER BY state {0} LIMIT {1},{2} ';
-    sql = sql.format(order, parseInt(offset), parseInt(limit + offset));
+    sql = sql.format(order, parseInt(offset), parseInt(limit) + parseInt(offset));
     console.log(sql);
 
     query(sql, function (err, rows, fields) {

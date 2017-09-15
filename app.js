@@ -20,6 +20,7 @@ var login = require('./routes/login');
 var project = require('./routes/project')
 var home = require('./routes/home');
 var manage = require('./routes/manage');
+var mission = require('./routes/mission');
 
 // 创建项目实例
 var app = express();
@@ -60,6 +61,7 @@ app.use('/demo', demo);
 app.use('/project',project);
 app.use('/home',home);
 app.use('/manage',manage);
+app.use('/mission',mission);
 
 
 // 404错误处理

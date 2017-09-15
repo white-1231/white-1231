@@ -33,9 +33,6 @@ router.get('/', function (req, res, next) {
         //链式处理 ，results 为 同步查询结果
         data.then(function (results) {
           
-          console.log(ret);
-          console.log(results);
-
           var groupname =['-1','M','PM','DE','TE','DA'];
           var statename = ['未开始','进行中','已完成','版本暂停','版本作废'];
 
@@ -207,7 +204,7 @@ router.get('/getAllversion',function(req,res){
     return res.json({total:0,rows:null});
   }
 
-  versiondb.get_dmtotal_bypj(pid,function(count){
+  versiondb.get_vstotal_bypj(pid,function(count){
     if(count == 0){
       return res.json({total:count,rows:null});
     }
@@ -245,7 +242,22 @@ router.get('/pjdetails',function(req,res,next){
   var result = sessionUtils.checkUsefulSession(req.session);
   
     if (result == 1) {
-      res.render('projectDetails', { title: '项目详细' });
+      //获取项目 pid
+      var pid = req.query.pid;
+
+      //同步查询 版本列表，需求列表 。--- 共同进行
+      var data = Promise.all([asyncdb.getvs_bypid(pid),asyncdb.getdm_bypid(pid)]);
+
+      data.then(function(results){
+
+        res.render('projectDetails', { 
+          title: '项目详细',
+          dmlist: results[1], //需求列表
+          vslist: results[0]  //版本列表
+        });
+        
+      })
+
     }else{
       res.render('login', { title: '首页' });
     }
