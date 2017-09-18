@@ -124,3 +124,26 @@ exports.get_dmtotal = function (pid,callback) {
     });
 
 }
+
+exports.update_msByid = function (id,name,state,desc,callback){
+
+    if (id == null || id == undefined || id == '') {
+        callback(false);
+        return;
+    }
+
+    var sql = 'UPDATE t_demand SET name="{0}", state={1}, d_desc="{2}" WHERE id={3} ;';
+
+    var sql = sql.format(name,state,desc,id);
+    console.log(sql);
+
+    query(sql, function(err, rows, fields) {
+        if (err) {
+            callback(false);
+            throw err; 
+        }
+        else{
+            callback(true);            
+        }
+    });
+}

@@ -127,3 +127,27 @@ exports.get_vstotal_bypj = function (pid,callback) {
     });
 
 }
+
+exports.update_version_byid = function (id, vName, vstate, vpctime, vpetime, vdesc, actime, aetime, callback) {
+    callback = callback == null ? noCallback : callback;
+
+    if (id == null || id == undefined || id == '') {
+        callback(false);
+        return;
+    }
+
+    var sql = 'UPDATE t_version SET  name="{0}", state={1}, v_desc="{2}",  pctime={3}, petime={4}, actime={5}, aetime={6} WHERE id={7} ;';
+    var sql = sql.format(vName, vstate, vdesc, vpctime, vpetime, actime, aetime, id);
+    console.log(sql);
+
+    query(sql, function (err, rows, fields) {
+        if (err) {
+            callback(false);
+            throw err;
+        }
+        else {
+            callback(true);
+        }
+    });
+
+}

@@ -46,11 +46,47 @@
                 </ul>
             </div>
 
-
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <div class="item-content item-project">
                     <h2 class="sub-header">项目信息</h2>
-                    <input type="hidden" id="pid" value='1505358650'>
+                    <div class="row ">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-8">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="pjName" class="col-sm-2 control-label">项目名称</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="pjName" placeholder="项目名称" value ="<%= project.name %>">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pjId" class="col-sm-2 control-label">项目编号</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="pjId" placeholder="项目编号" value ="<%= project.id %>" readonly>
+                                        <input type="hidden" id="pid" value='<%= project.id %>'>
+                                        <input type="hidden" id="pstate" value='<%= project.state %>'>
+                                        <input type="hidden" id="pendtime" value='<%= project.endtime %>'>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pjDesc" class="col-sm-2 control-label">项目描述</label>
+                                    <div class="col-sm-8">
+                                        <textarea class="form-control" rows="5" id="pjDesc" placeholder="项目描述"><%= project.p_desc %></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label"></label>
+                                    <div class="col-sm-8 row">
+                                        <div class=" col-xs-6 col-xs-offset-3">
+                                            <button type="button" class="btn btn-success btn-block" onclick="updateProject();">提交</button>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
                 </div>
                 
                 <div class="item-content item-version">
@@ -82,13 +118,6 @@
                                         <div class="col-md-1"></div>
                                         <div class="col-md-10">
                                             <form class="form-horizontal" id="addVersionFrom">
-                                                <div class="form-group ">
-                                                    <label for="v4pjID" class="col-sm-2 control-label">项目ID</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="v4pjName" placeholder="项目名称" readonly>
-                                                        <input type="hidden" class="form-control" id="v4pjID" placeholder="项目ID">
-                                                    </div>
-                                                </div>
                                                 <div class="form-group">
                                                     <label for="vName" class="col-sm-2 control-label">版本代号</label>
                                                     <div class="col-sm-8">
@@ -128,6 +157,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="modal fade" id="updateVersionModal" tabindex="-1" role="dialog" >
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
@@ -139,17 +169,69 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-1"></div>
-                                        <div class="col-md-10"></div>
+                                        <div class="col-md-10">
+                                            <form class="form-horizontal" id="mdVersionFrom">
+                                                <div class="form-group">
+                                                    <label for="mdvName" class="col-sm-2 control-label">版本代号</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="mdvName" placeholder="版本代号">
+                                                        <input type="hidden" class="form-control" id="mdvid" placeholder="版本代号">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="mdvstate" class="col-sm-2 control-label">版本状态</label>
+                                                    <div class="col-sm-8">
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="mdvstate" id="mdvstate" value="0" > 未开始
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="mdvstate" id="mdvstate" value="1"> 进行中
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="mdvstate" id="mdvstate" value="2"> 已完成
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="mdvstate" id="mdvstate" value="3"> 版本暂停
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="mdvstate" id="mdvstate" value="4"> 版本作废
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="mdvpctime" class="col-sm-2 control-label">计划开始</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="mdvpctime" placeholder="计划开始">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="mdvpetime" class="col-sm-2 control-label">计划结束</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="mdvpetime" placeholder="计划结束">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="mdvdesc" class="col-sm-2 control-label">版本描述</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control" rows="5" id="mdvdesc" placeholder="版本描述"></textarea>
+                                                        <div class="hidden">
+                                                            <textarea class="form-control" rows="5" id="mdvobj" placeholder="所选版本对象"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
                                         <div class="col-md-1"></div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" >提交</button>
+                                    <button type="button" class="btn btn-primary" onclick="updateVersion();">提交</button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="modal fade" id="addVMissionModal" tabindex="-1" role="dialog" >
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
@@ -225,6 +307,207 @@
 
                 <div class="item-content item-demand">
                     <h2 class="sub-header">管理需求</h2>
+                    <div id="demandtoolbar" class="btn-group">
+                        <button id="btn_add_demand" type="button" class="btn btn-default" data-toggle="modal" data-target="#adddmModal">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增需求
+                        </button>
+                        <button id="btn_update_demand" type="button" class="btn btn-default" data-toggle="modal" data-target="#updatedmModal">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改需求
+                        </button>
+                        <button id="btn_add_dmession" type="button" class="btn btn-default" data-toggle="modal" data-target="#addDMissionModal">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增任务
+                        </button>
+                    </div>
+
+                    <table id="demandList"></table>
+                    
+                    <div class="modal fade" id="adddmModal" tabindex="-1" role="dialog" >
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">新增需求</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10">
+                                            <form class="form-horizontal" id="demandaddFrom">
+                                                <div class="form-group">
+                                                    <label for="dmName" class="col-sm-2 control-label">需求名称</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="dmName" placeholder="需求名称">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="dmID" class="col-sm-2 control-label">需求编号</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="dmID" placeholder="需求编号-自动生成" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="dmDesc" class="col-sm-2 control-label">需求描述</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control" rows="5" id="dmDesc" placeholder="需求描述"></textarea>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" onclick="dmAddCommit();">提交</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>        
+                    </div>
+                    
+                    <div class="modal fade" id="updatedmModal" tabindex="-1" role="dialog" >
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">修改需求</h4>
+                                </div>
+                                <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-10">
+                                                <form class="form-horizontal" id="demandmdFrom">
+                                                    <div class="form-group">
+                                                        <label for="dmmdName" class="col-sm-2 control-label">需求名称</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" id="dmmdName" placeholder="需求名称">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="dmmdID" class="col-sm-2 control-label">需求编号</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" id="dmmdID" placeholder="需求编号-自动生成" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="dmmdstate" class="col-sm-2 control-label">任务类型</label>
+                                                        <div class="col-sm-8">
+                                                            <label class="radio-inline">
+                                                                        <input type="radio" name="dmmdstate" id="dmmdstate" value="2" > 已完成
+                                                                    </label>
+                                                            <label class="radio-inline">
+                                                                        <input type="radio" name="dmmdstate" id="dmmdstate" value="3"> 暂停开发
+                                                                    </label>
+                                                            <label class="radio-inline">
+                                                                        <input type="radio" name="dmmdstate" id="dmmdstate" value="4"> 异常问题
+                                                                    </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="dmmdDesc" class="col-sm-2 control-label">需求描述</label>
+                                                        <div class="col-sm-8">
+                                                            <textarea class="form-control" rows="5" id="dmmdDesc" placeholder="需求描述"></textarea>
+                                                            <div class="hidden">
+                                                                <textarea class="form-control" rows="5" id="dmmdobj" placeholder="修改前需求对象"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" onclick="dmmdCommit();">提交</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    </div>
+                            </div>
+                        </div>    
+                    </div>
+
+                    <div class="modal fade" id="addDMissionModal" tabindex="-1" role="dialog" >
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">新增任务</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10">
+                                            <form class="form-horizontal" id="adddmMSFrom">
+                                                <div class="form-group ">
+                                                    <label for="dmmsname" class="col-sm-2 control-label">任务名称</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="dmmsname" placeholder="任务名称">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="dmmspstime" class="col-sm-2 control-label">计划开始</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="dmmspstime" placeholder="计划开始">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="dmmspetime" class="col-sm-2 control-label">计划结束</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="dmmspetime" placeholder="计划结束">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="dmmstype" class="col-sm-2 control-label">任务类型</label>
+                                                    <div class="col-sm-8">
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="dmmstype" id="dmmstype" value="3" checked> 开发
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="dmmstype" id="dmmstype" value="4"> 测试
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="dmmstype" id="dmmstype" value="5"> 产品/运营/需求
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="dmmsvid" class="col-sm-2 control-label">所属版本</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="dmverslist" title="请选择所属版本" name="dmverslist" class="selectpicker show-tick form-control" data-live-search="false">
+                                                            <% for (var i=0; i<vslist.length; i++) { %>
+                                                                <option value="<%=vslist[i].id %>" > <%=vslist[i].name %></option>    
+                                                            <% } %>  
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="dmmsName" class="col-sm-2 control-label">所属需求</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="dmmsName" placeholder="需求名称" readonly>
+                                                        <input type="hidden" class="form-control" id="dmmsid" placeholder="需求编号">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="dmmsdesc" class="col-sm-2 control-label">任务描述</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control" rows="5" id="dmmsdesc" placeholder="任务描述"></textarea>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" onclick="msdmAddCommit();">提交</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
 
@@ -463,9 +746,9 @@
 
                 <div class="item-content item-member">
                     <h2 class="sub-header">管理人员</h2>
-
+                    
                 </div>
-                </div>
+            </div>
         </div>
     </div>
 
@@ -506,6 +789,13 @@
             $(".demand-nav").addClass('active');
             $('.item-content').hide();
             $('.item-demand').show();
+
+            var pid = $('#pid').val();
+            //销毁表格
+            $("#versionList").bootstrapTable('destroy'); 
+            //新建表格
+            var dtable = new Demandtable();
+            dtable.Init(pid);
         }
 
         function missionClick() {
@@ -544,12 +834,56 @@
 
     <script>
         $(function () {
-            missionClick();
+            memberClick();
         });
     </script>
 
     <script>
-    //项目信息   
+        //修改项目信息 
+        function updateProject(){
+            var pjName = $('#pjName').val();
+            var pid = $('#pid').val();
+            var pjDesc = $("#pjDesc").val();
+            var pstate = $('#pstate').val();
+            var pendtime = $('#pendtime').val();
+
+            var submitData = {
+                'id': pid,
+                'name': pjName,
+                'state':pstate,
+                'endtime':pendtime,
+                'desc': pjDesc
+            };
+
+            //id 丢失
+            if(pid == null ||pid == '' || pid == undefined){
+                alert('页面信息缺失，请刷新页面，重新修改！');
+                return ;
+            }
+
+            $.ajax({
+                url: '/project/update',
+                type: 'POST',
+                async: true,
+                dataType: 'json',
+                data: submitData,
+                success: function (result) {
+
+                    if (result.success) {
+                        alert('修改成功');
+                        //刷新页面
+                        window.location.href = "/project/pjdetails?pid="+pid;
+                        
+                    } else {
+                        alert(result.msg);
+                    }
+                },
+                error: function (error) {
+                    alert('系统异常，请稍后注册');
+                }
+            });
+        }
+
     </script>
 
     <script>
@@ -592,7 +926,8 @@
                         },
                         {
                             field: 'id',
-                            title: '版本编号'
+                            title: '版本编号',
+                            visible:false
                         }, {
                             field: 'name',
                             title: '版本代号',
@@ -631,6 +966,24 @@
 
                                 return timestr;
                             }
+                        } ,{
+                            field: 'actime',
+                            title: '实际开始时间',
+                            formatter: function (data) {
+                                var timestr = new Date(data * 1000).Format("yyyy-MM-dd");
+
+                                return timestr;
+                            },
+                            visible:false
+                        },{
+                            field: 'aetime',
+                            title: '实际结束时间',
+                            formatter: function (data) {
+                                var timestr = new Date(data * 1000).Format("yyyy-MM-dd");
+
+                                return timestr;
+                            },
+                            visible:false
                         }]
                 });
             }
@@ -638,27 +991,127 @@
 
         //添加版本
         function addVersion() {
-            //TODO
+            var vName = $('#vName').val();
+            var vpctime = $('#vpctime').val();
+            var vpetime = $('#vpetime').val();
+            var vdesc = $('#vdesc').val();
+            var pid = $('#pid').val();
+
+            var submitData = {
+                'pid': pid,
+                'vName': vName,
+                'vpctime': vpctime,
+                'vpetime': vpetime,
+                'vdesc': vdesc,
+            };
+
+            $.ajax({
+                url:'/project/addVersion',
+                type:'POST',
+                async:true,
+                dataType:'json',
+                data:submitData,
+                success:function(result){
+                    if(result.success){
+                        //关闭窗口
+                        $('#addVersionModal').modal('hide');
+                        //刷新列表
+                        $("#versionList").bootstrapTable('refresh');
+
+                    }else{
+                        alert(result.msg);
+                    }
+                },
+                error:function(error){
+                   alert('系统异常，请稍后再添加');
+                }
+            });
         }
 
         //修改版本信息
         function updateVersion(){
-            //TODO
-        }
+            var vid = $('#mdvid').val();
+            var vName = $('#mdvName').val();
+            var vstate = $("input[name='mdvstate']:checked").val();
+            var vpctime = $('#mdvpctime').val();
+            var vpetime = $('#mdvpetime').val();
+            var vdesc = $('#mdvdesc').val();
+            var oldobj = $('#mdvobj').val();
 
-        //添加任务，版本页面
-        function addVMission(){
-            //TODO
+            
+            var submitData = {
+                'id': vid,
+                'vName': vName,
+                'vstate':vstate,
+                'vpctime': vpctime,
+                'vpetime': vpetime,
+                'vdesc': vdesc,
+                'oldobj':oldobj
+            };
+
+            //id 丢失
+            if(vid == null ||vid == '' || vid == undefined){
+                alert('页面信息缺失，请关闭之后，重新修改！');
+                return ;
+            }
+
+            $.ajax({
+                url: '/version/update',
+                type: 'POST',
+                async: true,
+                dataType: 'json',
+                data: submitData,
+                success: function (result) {
+
+                    if (result.success) {
+                        alert('修改成功！');
+                        //关闭窗口
+                        $('#updateVersionModal').modal('hide');
+                        //刷新列表
+                        $("#versionList").bootstrapTable('refresh');
+
+                    } else {
+                        alert(result.msg);
+                    }
+                },
+                error: function (error) {
+                    alert('系统异常，请稍后修改');
+                }
+            });
         }
 
         //添加版本模态框赋值
         $('#addVersionModal').on('show.bs.modal', function (event) {
-            //TODO
+            //表单重置
+            document.getElementById('addVersionFrom').reset();
         });
 
         //修改版本模态框赋值
         $('#updateVersionModal').on('show.bs.modal', function (event) {
-            //TODO
+            var $vtable = $('#versionList');
+            var selectData = $vtable.bootstrapTable('getSelections');
+            var modal = $(this);
+            //是否有选择用户判断
+            var flag = selectData == '';
+
+            //表单重置
+            document.getElementById('mdVersionFrom').reset();
+
+            if ((!flag) && selectData[0].id != null&&selectData[0].state <2) {
+                //selectData[0].state <2
+                //版本需要状态为0，或者1 可修改
+
+                modal.find('#mdvName').val(selectData[0].name);
+                modal.find('#mdvid').val(selectData[0].id);
+                modal.find('input[name="mdvstate"][value="'+selectData[0].state+'"]').attr("checked",true);  
+                modal.find('#mdvpctime').val(selectData[0].pctime);
+                modal.find('#mdvpetime').val(selectData[0].petime);
+                modal.find('#mdvdesc').val(selectData[0].v_desc);
+                modal.find('#mdvobj').val(JSON.stringify(selectData[0]));
+                
+            }else{
+                return false;
+            }
         });
 
         //添加任务模态框赋值
@@ -680,6 +1133,7 @@
             }
         });
 
+        //版本页面 增加任务
         function vamCommit(){
             var vamName = $('#vamName').val();
             var vampstime = $('#vampstime').val();
@@ -728,7 +1182,269 @@
     </script>
 
     <script> 
-    //管理需求
+        //管理需求
+
+        //需求列表
+        function Demandtable() {
+            this.Init = function (pid) {
+                $('#demandList').bootstrapTable({
+                    url: '/project/getAlldm',
+                    method: 'get',
+                    queryParams: function queryParams(params) {   //设置查询参数  
+                        var param = {
+                            limit: params.limit,    //页面大小
+                            offset: params.offset,  //页码
+                            order: params.order,     //排序
+                            pid: pid  //所属项目
+                        };
+                        return param;
+                    },
+                    toolbar: '#demandtoolbar',              //工具按钮用哪个容器
+                    checkboxHeader: false,              //设置false 将在列头隐藏check-all checkbox .
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                      //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 20, 50],             //可供选择的每页的行数（*）
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    minimumCountColumns: 2,             //最少允许的列数
+                    clickToSelect: true,                //是否启用点击选中行
+                    singleSelect: true,                  //只能选中一行
+                    height: 550,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                    columns: [
+                        {
+                            checkbox: true
+                        },
+                        {
+                            field: 'id',
+                            title: '版本编号',
+                            visible:false
+                        }, {
+                            field: 'name',
+                            title: '需求名称',
+                        }, {
+                            field: 'state',
+                            title: '需求状态',
+                            formatter: function (data) {
+                                if (data == 0) {
+                                    return "未分解";
+                                } else if (data == 1) {
+                                    return "进行中";
+                                } else if(data == 2 ){
+                                    return "已完成";
+                                }else if(data == 3 ){
+                                    return "暂停开发";
+                                }else if(data == 4 ){
+                                    return "异常问题";
+                                }
+                            }
+                        }, {
+                            field: 'd_desc',
+                            title: '需求描述'
+                        }]
+                });
+            }
+        }
+
+        //创建需求模态框赋值
+        $('#adddmModal').on('show.bs.modal', function (event) {
+            document.getElementById("demandaddFrom").reset()  
+        });
+
+        //修改需求模态框赋值
+        $('#updatedmModal').on('show.bs.modal', function (event) {
+            var $mtable = $('#demandList');
+            var selectData = $mtable.bootstrapTable('getSelections');
+            var modal = $(this);
+
+            document.getElementById("demandmdFrom").reset();  
+
+            //是否有选择用户判断
+            var flag = selectData == '';
+
+            if ((!flag) && selectData[0].id != null) {
+               //个人信息赋值
+                modal.find('#dmmdName').val(selectData[0].name);
+                modal.find('#dmmdID').val(selectData[0].id);
+                modal.find('input[name="dmmdstate"][value="'+selectData[0].state+'"]').attr("checked",true);  
+                modal.find('#dmmdDesc').val(selectData[0].d_desc);
+                modal.find('#dmmdobj').val(JSON.stringify(selectData[0]));
+
+            }else{
+                return false;
+            }
+
+            
+        });
+
+        //需求页面创建任务模态框赋值
+        $('#addDMissionModal').on('show.bs.modal', function (event) {
+            var $mtable = $('#demandList');
+            var selectData = $mtable.bootstrapTable('getSelections');
+            var modal = $(this);
+
+            cleanSelect();
+            document.getElementById("adddmMSFrom").reset() ; 
+
+            //是否有选择用户判断
+            var flag = selectData == '';
+
+            if ((!flag) && selectData[0].id != null && selectData[0].state <2) {
+                //selectData[0].state <2
+                //需求状态为未分解，或者进行中的，可以关联创建任务
+
+               //个人信息赋值
+                modal.find('#dmmsName').val(selectData[0].name);
+                modal.find('#dmmsid').val(selectData[0].id);
+
+            }else{
+                return false;
+            }
+        });
+
+        //添加需求
+        function dmAddCommit() {
+            var dmpid = $('#pid').val();
+
+            var dmName = $('#dmName').val();
+            var dmID = Math.floor(new Date().getTime()/1000);
+            var dmDesc = $('#dmDesc').val();
+
+            var submitData = {
+                'pid': dmpid,
+                'dmName': dmName,
+                'dmID': dmID,
+                'dmDesc': dmDesc
+            };
+
+            $.ajax({
+                url: '/project/addDemand',
+                type: 'POST',
+                async: true,
+                dataType: 'json',
+                data: submitData,
+                success: function (result) {
+                    if (result.success) {
+                        //关闭窗口
+                        $('#adddmModal').modal('hide');
+                        //刷新列表
+                        $("#demandList").bootstrapTable('refresh');
+
+                    } else {
+                        alert(result.msg);
+                    }
+                },
+                error: function (error) {
+                    alert('系统异常，请稍后添加需求');
+                }
+            });
+        }
+
+        //修改需求
+        function dmmdCommit(){
+            var dmmdName = $('#dmmdName').val();
+            var dmmdID = $('#dmmdID').val();
+            var dmmdDesc = $('#dmmdDesc').val();
+            var dmmdstate = $("input[name='dmmdstate']:checked").val();
+            var dmmdobj = $('#dmmdobj').val();
+
+            //id 丢失
+            if(dmmdID == null ||dmmdID == '' || dmmdID == undefined){
+                alert('页面信息缺失，请关闭之后，重新修改！');
+                return ;
+            }
+
+            var submitData = {
+                'dmName': dmmdName,
+                'dmID': dmmdID,
+                'dmDesc': dmmdDesc,
+                'dmState':dmmdstate,
+                'oldobj':dmmdobj
+            };
+
+            $.ajax({
+                url: '/demand/update',
+                type: 'POST',
+                async: true,
+                dataType: 'json',
+                data: submitData,
+                success: function (result) {
+
+                    if (result.success) {
+                        alert('修改成功！');
+                        //关闭窗口
+                        $('#updatedmModal').modal('hide');
+                        //刷新列表
+                        $("#demandList").bootstrapTable('refresh');
+
+                    } else {
+                        alert(result.msg);
+                    }
+                },
+                error: function (error) {
+                    alert('系统异常，请稍后修改');
+                }
+            });
+            
+        }
+
+        //需求页添加任务
+        function msdmAddCommit(){
+            var msname = $('#dmmsname').val();
+            var mspstime = $('#dmmspstime').val();
+            var mspetime = $('#dmmspetime').val();
+            var mstype = $("input[name='dmmstype']:checked").val();
+            var msvid = $('#dmverslist').val();
+            var msdid = $('#dmmsid').val();
+            var msdesc = $('#dmmsdesc').val();
+            var mspid = $('#pid').val();
+
+            //暂无时间控件
+            mspstime = Math.floor(new Date().getTime() / 1000);
+            mspetime = mspstime + 86400;
+            
+             //不可为空
+            if(msvid == null){
+                alert('请选择所属版本！');
+                return ;
+            }
+        
+            var submitData = {
+                'name': msname,
+                'pstime': mspstime,
+                'petime': mspetime,
+                'type': mstype,
+                'vid': msvid,
+                'did': msdid,
+                'desc': msdesc,
+                'pid': mspid
+            };
+
+            $.ajax({
+                url: '/mission/add',
+                type: 'POST',
+                async: true,
+                dataType: 'json',
+                data: submitData,
+                success: function (result) {
+
+                    if (result.success) {
+                        alert('添加成功');
+                        //关闭窗口
+                        $('#addDMissionModal').modal('hide');
+                    } else {
+                        alert(result.msg);
+                    }
+                },
+                error: function (error) {
+                    alert('系统异常，请稍后注册');
+                }
+            });
+        }
     </script>
 
     <script>
@@ -1046,7 +1762,7 @@
                     }
                 },
                 error: function (error) {
-                    alert('系统异常，请稍后注册');
+                    alert('系统异常，请稍后修改');
                 }
             });
         }

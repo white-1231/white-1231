@@ -23,6 +23,8 @@ router.post('/add',function(req,res){
 
         missiondb.add_mission($name,$pstime,$petime,$type,$vid,$did,$desc,$pid,function(ret){
             if(ret){
+                //TODO 如果有需求关联，应该修改需求状态为进行中
+
                 return res.json({success:true, msg:'add success'});
             }else{
                 return res.json({success:false,msg:'db operate error'}); 

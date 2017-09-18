@@ -21,6 +21,8 @@ var project = require('./routes/project')
 var home = require('./routes/home');
 var manage = require('./routes/manage');
 var mission = require('./routes/mission');
+var demand = require('./routes/demand');
+var version = require('./routes/version');
 
 // 创建项目实例
 var app = express();
@@ -62,6 +64,8 @@ app.use('/project',project);
 app.use('/home',home);
 app.use('/manage',manage);
 app.use('/mission',mission);
+app.use('/demand',demand);
+app.use('/version',version);
 
 
 // 404错误处理

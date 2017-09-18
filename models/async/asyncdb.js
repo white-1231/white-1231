@@ -128,3 +128,30 @@ exports.getdm_bypid = function (pid) {
 
     });
 }
+
+/**
+ * 根据项目id，获取项目对象
+ */
+exports.getpj_bypid = function (pid) {
+    
+        return new Promise(function (resolve, reject) {
+    
+            if (pid == null || pid == undefined || pid == '') {
+                resolve([]);
+            }
+    
+            var sql = 'SELECT id,name,state,p_desc,creattime,endtime FROM t_project where id = "{0}" ';
+            sql = sql.format(pid);
+            console.log(sql);
+    
+            query(sql, function (err, rows, fields) {
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    resolve(rows[0]);
+                }
+            });
+    
+        });
+    }

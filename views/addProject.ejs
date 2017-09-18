@@ -150,7 +150,7 @@
                     <h2 class="sub-header">需求列表</h2>
                     <div id="dmtoolbar" class="btn-group">
                         <button id="btn_add" type="button" class="btn btn-default" data-toggle="modal" data-target="#demandModal">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增需求
                         </button>
                     </div>
                     <table id="demandList"></table>
@@ -357,7 +357,7 @@
                 var modal = $(this);
                 modal.find('#d4pjID').val(pid);
                 modal.find('#d4pjName').val(pname);
-                modal.find('#dmID').val(Math.floor(new Date().getTime()));
+                modal.find('#dmID').val(Math.floor(new Date().getTime()/1000));
             }else{
                 return false;
             }

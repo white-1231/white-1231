@@ -246,12 +246,13 @@ router.get('/pjdetails',function(req,res,next){
       var pid = req.query.pid;
 
       //同步查询 版本列表，需求列表 。--- 共同进行
-      var data = Promise.all([asyncdb.getvs_bypid(pid),asyncdb.getdm_bypid(pid)]);
-
+      var data = Promise.all([asyncdb.getvs_bypid(pid),asyncdb.getdm_bypid(pid),asyncdb.getpj_bypid(pid)]);
+      
       data.then(function(results){
 
         res.render('projectDetails', { 
           title: '项目详细',
+          project:results[2], //操作项目
           dmlist: results[1], //需求列表
           vslist: results[0]  //版本列表
         });
@@ -261,6 +262,34 @@ router.get('/pjdetails',function(req,res,next){
     }else{
       res.render('login', { title: '首页' });
     }
+});
+
+router.post('/update', function (req, res) {
+  var result = sessionUtils.checkUsefulSession(req.session);   
+
+  if(result == 1){
+    var submitData = req.body;
+    var $id = submitData.id;
+    var $name = submitData.name;
+    var $desc = submitData.desc;
+    var $state = submitData.state;
+    var $endtime = submitData.endtime;
+
+    projectdb.update_pjByID($id,$name,$state,$desc,$endtime, function(ret){
+      if(ret){
+        return res.json({success:true,msg:'success'});
+      }else{
+        return res.json({success:false,msg:'db error'});
+      }
+    }); 
+
+
+  }else{
+    return res.json({success:false,msg:'user not sign in'});
+  }
+
+  
+
 });
 
 module.exports = router;
