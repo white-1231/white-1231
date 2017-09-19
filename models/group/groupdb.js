@@ -90,3 +90,78 @@ exports.del_group_Bypid = function(pid,callback){
         }
     });    
 }
+
+exports.get_groupMember_byGidPid = function (order, offset, limit, pid, gid,callback){
+
+    callback = callback == null ? noCallback : callback;
+
+    if (pid == null || pid == '' || pid == undefined) {
+        callback(false);
+        return;
+    }
+
+    if (gid == null || gid == '' || gid == undefined) {
+        callback(false);
+        return;
+    }
+
+    if (order == null || order == '' || order == undefined || (order != "asc" || order != "desc")) {
+        order = 'ASC';
+    }
+
+    if (offset == null || offset == '' || offset == undefined) {
+        offset = 0;
+    }
+
+    if (limit == null || limit == '' || limit == undefined) {
+        limit = 10;
+    }
+    
+    var sql = 'SELECT g.id,g.uid,g.pid,g.gid,u.nickname FROM t_group g ,t_usr u where u.id = g.uid and g.pid = "{3}" and g.gid = {4} ORDER BY g.id {0} LIMIT {1},{2} ';
+    sql = sql.format(order, parseInt(offset), parseInt(limit) + parseInt(offset), pid,gid);
+    console.log(sql);
+
+    query(sql, function (err, rows, fields) {
+        if (err) {
+            throw err;
+        }
+        else {
+            if (rows.length > 0) {
+                callback(rows);
+            }
+            else {
+                callback(false);
+            }
+        }
+    });
+
+}
+
+exports.get_GpMbtotal_byGidPid = function (pid,gid, callback) {
+    
+    callback = callback == null ? noCallback : callback;
+
+    if (pid == null || pid == '' || pid == undefined) {
+        callback(0);
+        return;
+    }
+
+    if (gid == null || gid == '' || gid == undefined) {
+        callback(0);
+        return;
+    }
+
+    var sql = 'SELECT count(id)as count FROM t_group where pid = "{0}" and gid = {1} ';
+    sql = sql.format(pid,gid);
+    console.log(sql);
+
+    query(sql, function (err, rows, fields) {
+        if (err) {
+            throw err;
+        }
+        else {
+            callback(rows[0].count);
+        }
+    });
+    
+    }

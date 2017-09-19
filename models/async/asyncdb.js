@@ -134,24 +134,82 @@ exports.getdm_bypid = function (pid) {
  */
 exports.getpj_bypid = function (pid) {
     
-        return new Promise(function (resolve, reject) {
-    
-            if (pid == null || pid == undefined || pid == '') {
-                resolve([]);
+    return new Promise(function (resolve, reject) {
+
+        if (pid == null || pid == undefined || pid == '') {
+            resolve([]);
+        }
+
+        var sql = 'SELECT id,name,state,p_desc,creattime,endtime FROM t_project where id = "{0}" ';
+        sql = sql.format(pid);
+        console.log(sql);
+
+        query(sql, function (err, rows, fields) {
+            if (err) {
+                reject(err);
             }
-    
-            var sql = 'SELECT id,name,state,p_desc,creattime,endtime FROM t_project where id = "{0}" ';
-            sql = sql.format(pid);
-            console.log(sql);
-    
-            query(sql, function (err, rows, fields) {
-                if (err) {
-                    reject(err);
-                }
-                else {
-                    resolve(rows[0]);
-                }
-            });
-    
+            else {
+                resolve(rows[0]);
+            }
         });
-    }
+
+    });
+}
+
+/**
+ * 根据组id，项目id 获取组成员
+ */
+exports.getMember_byPidGid = function (pid,gid) {
+    
+    return new Promise(function (resolve, reject) {
+
+        if (pid == null || pid == undefined || pid == '') {
+            resolve([]);
+        }
+
+        if (gid == null || gid == undefined || gid == '') {
+            resolve([]);
+        }
+
+        var sql = 'SELECT uid FROM t_group where pid = "{0}" and gid = {1} ';
+        sql = sql.format(pid,gid);
+        console.log(sql);
+
+        query(sql, function (err, rows, fields) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(rows);
+            }
+        });
+
+    });
+}
+
+/**
+ * 根据pid 获取全部成员   pid 为权限id
+ */
+exports.getMember_byPid = function (pid) {
+    
+    return new Promise(function (resolve, reject) {
+
+        if (pid == null || pid == undefined || pid == '') {
+            resolve([]);
+        }
+
+        var sql = 'SELECT p.uid,p.pid,u.nickname FROM t_usr_permission p,t_usr u where u.id = p.uid and pid = {0} ';
+        sql = sql.format(pid);
+        console.log(sql);
+
+        query(sql, function (err, rows, fields) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(rows);
+            }
+        });
+
+    });
+}

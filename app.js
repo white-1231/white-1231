@@ -23,6 +23,7 @@ var manage = require('./routes/manage');
 var mission = require('./routes/mission');
 var demand = require('./routes/demand');
 var version = require('./routes/version');
+var groupmember = require('./routes/groupmember')
 
 // 创建项目实例
 var app = express();
@@ -66,6 +67,7 @@ app.use('/manage',manage);
 app.use('/mission',mission);
 app.use('/demand',demand);
 app.use('/version',version);
+app.use('/group',groupmember);
 
 
 // 404错误处理

@@ -759,10 +759,11 @@
                     <div>
                         <!-- 空行 -->
                         <p>&nbsp;</p>
+                        <input type ="hidden" id="gidSelected" value="">
                     </div>
 
                     <div id="grouptoolbar" class="btn-group">
-                        <button id="btn_add_member" type="button" class="btn btn-default" data-toggle="modal" data-target="#">
+                        <button id="btn_add_member" type="button" class="btn btn-default" data-toggle="modal" data-target="#addGroupmbModal">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增成员
                         </button>
                         <button id="btn_update_member" type="button" class="btn btn-default" data-toggle="modal" data-target="#">
@@ -773,6 +774,57 @@
                         </button>
                     </div>
                     <table id="groupList"></table>
+
+                    <div class="modal fade" id="addGroupmbModal" tabindex="-1" role="dialog" >
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">新增成员</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10">
+                                            <div class="table-responsive">
+                                                <table class="table ">
+                                                    <tbody id="addMemt">
+                                                        <tr>
+                                                            <td> <input type="checkbox"> C罗</td>
+                                                            <td> <input type="checkbox"> 本泽马</td>
+                                                            <td> <input type="checkbox"> 贝尔</td>
+                                                            <td> <input type="checkbox"> 阿森西奥</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><input type="checkbox"> 克洛斯</td>
+                                                            <td><input type="checkbox"> 莫德里奇</td> 
+                                                            <td><input type="checkbox"> 卡塞米罗</td>
+                                                            <td><input type="checkbox"> 伊斯科</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><input type="checkbox"> 马塞洛</td>
+                                                            <td><input type="checkbox"> 拉莫斯</td> 
+                                                            <td><input type="checkbox"> 瓦拉内</td>
+                                                            <td><input type="checkbox"> 卡瓦哈尔</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" onclick="addMemeber();">提交</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     
                 </div>
             </div>
@@ -852,7 +904,7 @@
             $('.item-content').hide();
             $('.item-member').show();
 
-            pmClick();
+            pmClick(2);
         }
 
         //清除select 选择方法
@@ -1806,42 +1858,73 @@
         //管理人员
 
         //页签导航条
-        function pmClick(){
+        function pmClick(index){
             $(".subnav-item").removeClass('active');
             $(".pm-nav").addClass('active');
+
+            var pid = $('#pid').val();
+            $('#gidSelected').val(index);
+            //销毁表格
+            $("#groupList").bootstrapTable('destroy'); 
+            //新建表格
+            var gtable = new Grouptable();
+            gtable.Init(index,pid);
            
         }
 
-        function deClick(){
+        function deClick(index){
             $(".subnav-item").removeClass('active');
             $(".de-nav").addClass('active');
+
+            var pid = $('#pid').val();
+            $('#gidSelected').val(index);
+            //销毁表格
+            $("#groupList").bootstrapTable('destroy'); 
+            //新建表格
+            var gtable = new Grouptable();
+            gtable.Init(index,pid);
     
         }
 
-        function teClick(){
+        function teClick(index){
             $(".subnav-item").removeClass('active');
             $(".te-nav").addClass('active');
 
+            var pid = $('#pid').val();
+            $('#gidSelected').val(index);
+            //销毁表格
+            $("#groupList").bootstrapTable('destroy'); 
+            //新建表格
+            var gtable = new Grouptable();
+            gtable.Init(index,pid);
         }
 
-        function daClick(){
+        function daClick(index){
             $(".subnav-item").removeClass('active');
             $(".da-nav").addClass('active');
            
+            var pid = $('#pid').val();
+            $('#gidSelected').val(index);
+            //销毁表格
+            $("#groupList").bootstrapTable('destroy'); 
+            //新建表格
+            var gtable = new Grouptable();
+            gtable.Init(index,pid);
         }
 
-        //版本列表
+        //成员列表
         function Grouptable() {
-            this.Init = function (index) {
+            this.Init = function (index,pid) {
                 $('#groupList').bootstrapTable({
-                    url: '/project/getAllversion',
+                    url: '/group/getMembers',
                     method: 'get',
                     queryParams: function queryParams(params) {   //设置查询参数  
                         var param = {
                             limit: params.limit,    //页面大小
                             offset: params.offset,  //页码
                             order: params.order,     //排序
-                            index: index  //所属组别
+                            index: index,  //所属组别
+                            pid:pid        //所属项目
                         };
                         return param;
                     },
@@ -1870,11 +1953,11 @@
                             title: '人员编号',
                             visible:false
                         }, {
-                            field: 'name',
+                            field: 'nickname',
                             title: '姓名',
                         },{
                             field: 'pid',
-                            title: '编号',
+                            title: '项目编号',
                             visible:false
                         },{
                             field: 'gid',
@@ -1883,6 +1966,93 @@
                         }]
                 });
             }
+        }
+
+        //添加成员模态框内容生成
+        //创建任务模态框赋值
+        $('#addGroupmbModal').on('show.bs.modal', function (event) {
+            $('#addMemt').empty();
+
+            var pid = $('#pid').val();
+            var gid = $('#gidSelected').val();
+            $.get("/group/addMemberbefore?gid=" + gid+ "&pid=" +pid, function (result) {
+                if(result.success){
+                    var data = result.data;
+
+                    var values = "<tr>";
+                    for(var i =0 ;i< data.length ;i++){
+                        var temp = data[i];
+                        values += "<td> <input type='checkbox' name='addMember'  value ='"+temp.uid+"'>"+temp.nickname+"</td>"
+
+                        if(i == data.length-1){
+                            values +='<tr>';
+                            break;
+                        }
+
+                        if( i> 0 && i%4 ==0){
+                            values += "</tr>";
+                            if(i != data.length-1){
+                                values +='<tr>';
+                            }
+                        }
+
+                    }
+
+                    $('#addMemt').append(values);
+
+                }else{
+                    $('#addMemt').append('<tr><td>没有人员可以再添加</td></tr>');
+                }
+            });    
+        });
+
+        //添加成员
+        function addMemeber(){
+           var checked = [];
+           //获取选中值
+           $("input[name='addMember']:checked").each(function () {
+                checked.push( parseInt(this.value));
+            }); 
+
+            if(checked.length == 0){
+                //没选中添加，瞎点
+                $('#addGroupmbModal').modal('hide');
+
+                return;
+            }
+
+            var pid = $('#pid').val();
+            var gid = $('#gidSelected').val();
+            var checkArr = checked.join(',');
+
+            var submitData ={
+                pid:pid,
+                gid:gid,
+                checkArr:checkArr
+            }
+
+            $.ajax({
+                url: '/group/addMemeber',
+                type: 'POST',
+                async: true,
+                dataType: 'json',
+                data: submitData,
+                success: function (result) {
+                    if (result.success) {
+                        //关闭窗口
+                        $('#addGroupmbModal').modal('hide');
+                        //刷新列表
+                        $("#groupList").bootstrapTable('refresh');
+
+                    } else {
+                        alert(result.msg);
+                    }
+                },
+                error: function (error) {
+                    alert('系统异常，请稍后添加需求');
+                }
+            });
+
         }
 
     </script>
