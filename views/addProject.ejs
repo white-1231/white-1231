@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
     <!-- table -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+    <!-- date -->
+    <link rel='stylesheet' href='/stylesheets/bootstrap-datetimepicker.min.css' />
 
     <style>
         .item-content {
@@ -288,12 +290,26 @@
     <!-- table -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+    <!-- date -->
+    <script src="/javascripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="/javascripts/bootstrap-datetimepicker.zh-CN.js"></script>
+    
 
     <script>
         $(function () {
-            projectClick();  
+            versionClick();  
         });
 
+        $('.form_date').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		minView: 2,
+		forceParse: 0
+    });
     </script>
 
     <script>

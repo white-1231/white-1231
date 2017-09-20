@@ -164,4 +164,38 @@ exports.get_GpMbtotal_byGidPid = function (pid,gid, callback) {
         }
     });
     
+}
+
+exports.del_member_byuid = function(pid,gid,uid,callback){
+    callback = callback == null ? noCallback : callback;
+    
+    if (pid == null || pid == undefined || pid == '') {
+        callback(false);
+        return;
     }
+
+    if (gid == null || gid == undefined || gid == '') {
+        callback(false);
+        return;
+    }
+
+    if (uid == null || uid == undefined || uid == '') {
+        callback(false);
+        return;
+    }
+
+    var sql = 'delete from t_group where pid = {0} and gid ={1} and uid = {2};';
+    sql = sql.format(pid,gid,uid);
+
+    console.log(sql);
+
+    query(sql, function (err, rows, fields) {
+        if (err) {
+            callback(false);
+            throw err;
+        }
+        else {
+            callback(true);
+        }
+    });    
+}
