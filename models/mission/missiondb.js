@@ -99,9 +99,9 @@ exports.get_allMS_bypj = function (order, offset, limit, pid, callback) {
     if (limit == null || limit == '' || limit == undefined) {
         limit = 10;
     }
-
+    
     var sql = 'SELECT id,name,state,status,pid,did,vid,m_desc,type,owner,pstime,petime,astime,aetime FROM t_mission where pid = "{3}" ORDER BY state {0} LIMIT {1},{2} ';
-    sql = sql.format(order, parseInt(offset), parseInt(limit) + parseInt(offset), pid);
+    sql = sql.format(order, parseInt(offset), parseInt(limit), pid);
     console.log(sql);
 
     query(sql, function (err, rows, fields) {
@@ -155,5 +155,70 @@ exports.update_msByid = function (id,pid,did,vid,name,state,desc,type,pstime,pet
     });
 
     
+}
+
+exports.getMS_byOwner = function (owner,callback){
+    callback = callback == null ? noCallback : callback;
+
+    if (owner == null || owner == '' || owner == undefined) {
+        callback(false);
+        return;
+    }
+
+    var sql = 'SELECT m.id,m.name,m.status,p.name pname,v.name vname,d.name dname,m.m_desc,m.type,m.pstime,m.petime,m.astime,m.aetime FROM t_mission m '+
+    'left join t_project p on m.pid= p.id left join t_version v on m.vid = v.id left join t_demand d on m.did = d.id  where m.status <2 and m.owner = {0}';
+    sql = sql.format(owner);
+    console.log(sql);
+
+    query(sql, function (err, rows, fields) {
+        if (err) {
+            throw err;
+        }
+        else {
+            if (rows.length > 0) {
+                callback(rows);
+            }
+            else {
+                callback(false);
+            }
+        }
+    });
+
+}
+
+exports.update_MSstatus_byid = function(id,status,mdtime,callback){
+    callback = callback == null ? noCallback : callback;
+
+    if (id == null || id == '' || id == undefined) {
+        callback(false);
+        return;
+    }
+
+    if (status == null || status == '' || status == undefined) {
+        callback(false);
+        return;
+    }
+
+    var time;
+    if(status == 2||status == 3){
+        time = "aetime = {1}";
+    }else{
+        time = "astime = {1}";
+    }
+
+    var sql = 'UPDATE t_mission SET status="{0}",'+time+' WHERE id={2} ;'
+    sql = sql.format(status,mdtime,id);
+    console.log(sql);
+
+    query(sql, function(err, rows, fields) {
+        if (err) {
+            callback(false);
+            throw err; 
+        }
+        else{
+            callback(true);            
+        }
+    });
+
 }
 

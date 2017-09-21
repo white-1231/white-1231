@@ -29,7 +29,7 @@ router.get('/', function (req, res, next) {
           pid = ret[0].id;
         }; 
         //同步查询项目组，项目版本 。--- 共同进行
-        var data = Promise.all([asyncdb.getGroup_byPid(pid),asyncdb.getVersion_byPid(pid)]);
+        var data = Promise.all([asyncdb.getGroup_byPid(pid),asyncdb.getVersion_byPid(pid),asyncdb.getMS_byPid(pid)]);
         //链式处理 ，results 为 同步查询结果
         data.then(function (results) {
           
@@ -43,7 +43,8 @@ router.get('/', function (req, res, next) {
             groupname:groupname,          //职能名称
             statename:statename,          //版本状态名称
             versionarr:results[1] ,       // 版本列表
-            pjarr :ret                    //项目列表
+            pjarr :ret,                    //项目列表
+            misarr:results[2]              //任务列表
           });
         });
 
@@ -226,8 +227,9 @@ router.post('/addVersion',function(req,res){
   var $vpetime = submitData.vpetime;
   var $vdesc = submitData.vdesc;
 
-  $vpctime = '' ;
-  $vpetime = '' ;
+  //时间传来的值为 yyyy-mm-dd
+  $vpctime = (new Date($vpctime).getTime()/1000) ;
+  $vpetime = (new Date($vpetime).getTime()/1000) ;
 
   versiondb.add_version($pid,$vName,$vdesc,$vpctime,$vpetime,function(ret){
     if(ret){

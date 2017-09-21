@@ -85,7 +85,7 @@ exports.get_allversion_bypj = function (order, offset, limit, pid, callback) {
     }
 
     var sql = 'SELECT id,name,state,v_desc,pid,pctime,petime,actime,aetime FROM t_version where pid = "{3}" ORDER BY id {0} LIMIT {1},{2} ';
-    sql = sql.format(order, parseInt(offset),parseInt(limit) + parseInt(offset),pid);
+    sql = sql.format(order, parseInt(offset),parseInt(limit) ,pid);
     console.log(sql);
 
     query(sql, function (err, rows, fields) {

@@ -59,7 +59,7 @@ exports.getVersion_byPid = function (pid) {
             return ;
         }
 
-        var sql = 'SELECT id,name,state,pctime,petime,pid FROM t_version where pid = "{0}" ORDER BY pctime desc ';
+        var sql = 'SELECT id,name,state,pctime,petime,pid FROM t_version where pid = "{0}" ORDER BY id desc ';
         sql = sql.format(pid);
         console.log(sql);
 
@@ -74,6 +74,33 @@ exports.getVersion_byPid = function (pid) {
 
     });
 
+}
+
+/**
+ * 根据项目id，获取临近到期的任务
+ */
+exports.getMS_byPid = function (pid) {
+    return new Promise(function (resolve, reject) {
+
+        if (pid == null || pid == undefined || pid == '') {
+            resolve([]);
+            return;
+        }
+
+        var sql = 'SELECT m.name, m.petime,m.owner FROM t_mission m where pid = "{0}" and status < 2 order by petime desc ;';
+        sql = sql.format(pid);
+        console.log(sql);
+
+        query(sql, function (err, rows, fields) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(rows);
+            }
+        });
+
+    });
 }
 
 /**
@@ -322,3 +349,4 @@ exports.update_msOwn_byid = function (ids, uid) {
 
     });
 }
+

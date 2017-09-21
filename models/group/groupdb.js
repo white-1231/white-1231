@@ -118,7 +118,7 @@ exports.get_groupMember_byGidPid = function (order, offset, limit, pid, gid,call
     }
     
     var sql = 'SELECT g.id,g.uid,g.pid,g.gid,u.nickname FROM t_group g ,t_usr u where u.id = g.uid and g.pid = "{3}" and g.gid = {4} ORDER BY g.id {0} LIMIT {1},{2} ';
-    sql = sql.format(order, parseInt(offset), parseInt(limit) + parseInt(offset), pid,gid);
+    sql = sql.format(order, parseInt(offset), parseInt(limit), pid,gid);
     console.log(sql);
 
     query(sql, function (err, rows, fields) {

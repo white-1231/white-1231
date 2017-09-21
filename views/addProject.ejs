@@ -293,7 +293,7 @@
     
     <script>
         $(function () {
-            versionClick();  
+            projectClick();  
         });
         
     </script>
@@ -331,13 +331,12 @@
             $('.item-content').hide();
             $('.item-version').show();
 
+            
             var pid = $('#hasPID').val();
             if(pid == ''){
                 $('#hasPID').val(-1);
                 pid = -1;
             }   
-
-            var pid = $('#pid').val();
             //销毁表格
             $("#versionList").bootstrapTable('destroy'); 
             //新建表格
@@ -375,8 +374,7 @@
             document.getElementById('versionFrom').reset();
 
             laydate.render({
-                elem: '#vpetime',
-                value: '1989-10-14'
+                elem: '#vpetime'
             });
 
             laydate.render({
@@ -389,10 +387,9 @@
                 modal.find('#v4pjName').val(pname);
 
                
+            }else{
+                return false;
             }
-            // else{
-            //     return false;
-            // }
 
         })
 
@@ -643,11 +640,6 @@
             var vpctime = $('#vpctime').val();
             var vpetime = $('#vpetime').val();
             var vdesc = $('#vdesc').val();
-
-            console.log(vpctime);
-            console.log(vpetime);
-
-            return ;
 
             var submitData = {
                 'pid': v4pjID,

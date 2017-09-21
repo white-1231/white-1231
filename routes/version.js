@@ -19,6 +19,10 @@ router.post('/update',function(req,res){
         var $vpetime = submitData.vpetime;
         var $vdesc = submitData.vdesc;
 
+        //时间传来的值为 yyyy-mm-dd
+        $vpctime = (new Date($vpctime).getTime()/1000) ;
+        $vpetime = (new Date($vpetime).getTime()/1000) ;
+
         var oldobj = JSON.parse(submitData.oldobj);
 
         var actime = oldobj.actime;

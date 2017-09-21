@@ -908,6 +908,8 @@
     <!-- table -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+    <!-- date -->
+    <script src="/javascripts/laydate/laydate.js"></script>
 
     <script>
         //界面显示控制
@@ -985,7 +987,7 @@
 
     <script>
         $(function () {
-            memberClick();
+            projectClick();
         });
     </script>
 
@@ -1069,7 +1071,7 @@
                     minimumCountColumns: 2,             //最少允许的列数
                     clickToSelect: true,                //是否启用点击选中行
                     singleSelect: true,                  //只能选中一行
-                    height: 550,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    height: 570,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
                     uniqueId: "id",                     //每一行的唯一标识，一般为主键列
                     columns: [
                         {
@@ -1235,6 +1237,16 @@
         $('#addVersionModal').on('show.bs.modal', function (event) {
             //表单重置
             document.getElementById('addVersionFrom').reset();
+
+            laydate.render({
+                elem: '#vpetime'
+            });
+
+            laydate.render({
+                elem: '#vpctime'
+            });
+
+
         });
 
         //修改版本模态框赋值
@@ -1248,6 +1260,17 @@
             //表单重置
             document.getElementById('mdVersionFrom').reset();
 
+            laydate.render({
+                elem: '#mdvpctime',
+                value: new Date(selectData[0].pctime * 1000).Format("yyyy-MM-dd")
+            });
+
+            laydate.render({
+                elem: '#mdvpetime',
+                value: new Date(selectData[0].petime * 1000).Format("yyyy-MM-dd")
+            });
+
+
             if ((!flag) && selectData[0].id != null&&selectData[0].state <2) {
                 //selectData[0].state <2
                 //版本需要状态为0，或者1 可修改
@@ -1255,8 +1278,6 @@
                 modal.find('#mdvName').val(selectData[0].name);
                 modal.find('#mdvid').val(selectData[0].id);
                 modal.find('input[name="mdvstate"][value="'+selectData[0].state+'"]').attr("checked",true);  
-                modal.find('#mdvpctime').val(selectData[0].pctime);
-                modal.find('#mdvpetime').val(selectData[0].petime);
                 modal.find('#mdvdesc').val(selectData[0].v_desc);
                 modal.find('#mdvobj').val(JSON.stringify(selectData[0]));
                 
@@ -1276,6 +1297,14 @@
             //表单重置
             document.getElementById('vamFrom').reset();
 
+            laydate.render({
+                elem: '#vampetime'
+            });
+
+            laydate.render({
+                elem: '#vampstime'
+            });
+
             if ((!flag) && selectData[0].id != null) {
                 modal.find('#vamVNAME').val(selectData[0].name);
                 modal.find('#vamvid').val(selectData[0].id);
@@ -1294,9 +1323,9 @@
             var vamDesc = $('#vamDesc').val();
             var vampid = $('#pid').val();
 
-            //暂无时间控件
-            vampstime = Math.floor(new Date().getTime()/1000);
-            vampetime = vampstime + 86400;
+            //时间控件 格式为 yyyy-mm-dd 需转为数字 ，单位秒
+            vampstime = Math.floor(new Date(vampstime).getTime()/1000);
+            vampetime = Math.floor(new Date(vampetime).getTime()/1000);
             
             var submitData = {
                 'name': vamName,
@@ -1364,7 +1393,7 @@
                     minimumCountColumns: 2,             //最少允许的列数
                     clickToSelect: true,                //是否启用点击选中行
                     singleSelect: true,                  //只能选中一行
-                    height: 550,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    height: 570,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
                     uniqueId: "id",                     //每一行的唯一标识，一般为主键列
                     columns: [
                         {
@@ -1440,6 +1469,14 @@
 
             cleanSelect();
             document.getElementById("adddmMSFrom").reset() ; 
+
+            laydate.render({
+                elem: '#dmmspstime'
+            });
+
+            laydate.render({
+                elem: '#dmmspetime'
+            });
 
             //是否有选择用户判断
             var flag = selectData == '';
@@ -1554,9 +1591,9 @@
             var msdesc = $('#dmmsdesc').val();
             var mspid = $('#pid').val();
 
-            //暂无时间控件
-            mspstime = Math.floor(new Date().getTime() / 1000);
-            mspetime = mspstime + 86400;
+            //时间控件 格式为 yyyy-mm-dd 需转为数字 ，单位秒
+            mspstime = Math.floor(new Date(mspstime).getTime()/1000);
+            mspetime = Math.floor(new Date(mspetime).getTime()/1000);
             
              //不可为空
             if(msvid == null){
@@ -1630,7 +1667,7 @@
                     minimumCountColumns: 2,             //最少允许的列数
                     clickToSelect: true,                //是否启用点击选中行
                     singleSelect: true,                  //只能选中一行
-                    height: 550,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    height: 570,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
                     uniqueId: "id",                     //每一行的唯一标识，一般为主键列
                     columns: [
                         {
@@ -1761,7 +1798,15 @@
          //创建任务模态框赋值
          $('#addmsModal').on('show.bs.modal', function (event) {
             cleanSelect();
-            document.getElementById("addMSFrom").reset()  
+            document.getElementById("addMSFrom").reset() ;
+            
+            laydate.render({
+                elem: '#mspstime'
+            });
+
+            laydate.render({
+                elem: '#mspetime'
+            });
         });
 
         //创建任务模态框赋值
@@ -1773,6 +1818,16 @@
             cleanSelect();
             document.getElementById("updateMSFrom").reset();  
 
+            laydate.render({
+                elem: '#msmdpstime',
+                value: new Date(selectData[0].pstime* 1000).Format("yyyy-MM-dd")
+            });
+
+            laydate.render({
+                elem: '#msmdpetime',
+                value: new Date(selectData[0].petime* 1000).Format("yyyy-MM-dd")
+            });
+
             //是否有选择用户判断
             var flag = selectData == '';
 
@@ -1780,8 +1835,6 @@
                //个人信息赋值
                 modal.find('#msmdid').val(selectData[0].id);
                 modal.find('#msmdname').val(selectData[0].name);
-                modal.find('#msmdpstime').val(selectData[0].pstime);
-                modal.find('#msmdpetime').val(selectData[0].petime);
                 modal.find('input[name="msmdtype"][value="'+selectData[0].type+'"]').attr("checked",true);  
                 modal.find('input[name="msmdstate"][value="'+selectData[0].state+'"]').attr("checked",true);  
                 modal.find('#msmddesc').val(selectData[0].m_desc);
@@ -1809,9 +1862,8 @@
             var msdesc = $('#msdesc').val();
             var mspid = $('#pid').val();
 
-            //暂无时间控件
-            mspstime = Math.floor(new Date().getTime() / 1000);
-            mspetime = mspstime + 86400;
+            mspstime = Math.floor(new Date(mspstime).getTime() / 1000);
+            mspetime = Math.floor(new Date(mspetime).getTime() / 1000);
 
             //不可为空
             if(msvid == null){
@@ -1867,6 +1919,9 @@
             var msmddesc = $('#msmddesc').val();
             var mspid = $('#pid').val();
             var oldobj = $('#msmdobj').val();
+
+            msmdpstime = Math.floor(new Date(msmdpstime).getTime() / 1000);
+            msmdpetime = Math.floor(new Date(msmdpetime).getTime() / 1000);
 
             //不可为空
             if(msmdvid == null){

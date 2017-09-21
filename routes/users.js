@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
   var result = sessionUtils.checkUsefulSession(req.session);
 
   if (result == 1) {
-    res.render('home', { title: '个人' });
+    res.render('home', { title: '个人主页' });
   } else {
     res.render('login', { title: '首页' })
   }

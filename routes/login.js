@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
   var result = sessionUtils.checkUsefulSession(req.session);
 
   if(result == 1){
-    res.render('home', { title: '主页' });  
+    res.render('home', { title: '个人主页' });  
   }else if(result == -1){
     res.render('login', { title: '首页' });
   }else if(result == -2){
@@ -40,7 +40,7 @@ router.get('/', function(req, res, next) {
           }
           req.session.permission = permission;
 
-          res.render('home', { title: '主页' });
+          res.render('home', { title: '个人主页' });
         }); 
       }
     });
