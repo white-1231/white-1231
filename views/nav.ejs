@@ -23,10 +23,14 @@
                         <li><a href="/home">个人主页</a></li>
                         <li><a href="#">信息修改</a></li>
                         <li><a href="#">聊天</a></li>
+                        <% if(session.permission[2] == 1){ %>
                         <li role="separator" class="divider"></li>
                         <li><a href="/project/add">添加项目</a></li>
+                        <% } %>
+                        <% if(session.permission[1] == 1){ %>
                         <li role="separator" class="divider"></li>
                         <li><a href="/manage">管理</a></li>
+                        <% } %>
                         <li role="separator" class="divider"></li>
                         <li><a href="/logOut">登出</a></li>
                     </ul>

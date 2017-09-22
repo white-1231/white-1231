@@ -57,6 +57,12 @@ app.use(session({
 // 定义静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function (req, res, next) {
+  res.locals.session = req.session;
+  next();
+});
+
+
 // 匹配路径和路由
 app.use('/',login);
 app.use('/users', users);

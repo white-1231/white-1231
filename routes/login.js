@@ -98,6 +98,8 @@ router.post('/signIn',function(req,res){
 router.get('/logOut',function(req, res, next){
   delete req.session.user;
   delete req.session.sign;
+  delete req.session.permission;
+  delete req.session.pjauth;
 
   res.render('login', { title: '首页' });
 });

@@ -21,6 +21,9 @@ router.get('/', function (req, res, next) {
     //项目id  ，只用在项目页面，点击指定项目存在
     var pid = req.query.pid;
 
+    var groupname =['-1','M','PM','DE','TE','DA'];
+    var statename = ['未开始','进行中','已完成','版本暂停','版本作废'];
+
     //查询所属项目
     projectdb.getPeoject_byUid(user.id ,function(ret){
       if(ret){
@@ -31,10 +34,22 @@ router.get('/', function (req, res, next) {
         //同步查询项目组，项目版本 。--- 共同进行
         var data = Promise.all([asyncdb.getGroup_byPid(pid),asyncdb.getVersion_byPid(pid),asyncdb.getMS_byPid(pid)]);
         //链式处理 ，results 为 同步查询结果
-        data.then(function (results) {
-          
-          var groupname =['-1','M','PM','DE','TE','DA'];
-          var statename = ['未开始','进行中','已完成','版本暂停','版本作废'];
+        data.then(function (results) {  
+
+          //组成员
+          var grouparr = results[0];
+
+          //session 存贮在该项目组的角色
+          var user = req.session.user;
+          //存储权限数组
+          var pjauth = [];
+          for(var i = 0 ;i <grouparr.length;i++){
+            if(grouparr[i].id = user.id){
+              pjauth.push(grouparr[i].gid);
+            }
+          }
+
+          req.session.pjauth = pjauth.join(',');
 
           res.render('project', { 
             title: '项目' ,
@@ -49,7 +64,16 @@ router.get('/', function (req, res, next) {
         });
 
       }else{
-        res.render('project', { title: '项目' });
+        res.render('project', { 
+          title: '项目' ,
+          selectpj:undefined,                   //用户选择的项目
+          grouparr:[],           //组成员
+          groupname:groupname,          //职能名称
+          statename:statename,          //版本状态名称
+          versionarr:[] ,       // 版本列表
+          pjarr :[],                    //项目列表
+          misarr:[]              //任务列表
+        });
       }
     });
 
@@ -247,19 +271,25 @@ router.get('/pjdetails',function(req,res,next){
       //获取项目 pid
       var pid = req.query.pid;
 
-      //同步查询 版本列表，需求列表 。--- 共同进行
-      var data = Promise.all([asyncdb.getvs_bypid(pid),asyncdb.getdm_bypid(pid),asyncdb.getpj_bypid(pid)]);
-      
-      data.then(function(results){
-
-        res.render('projectDetails', { 
-          title: '项目详细',
-          project:results[2], //操作项目
-          dmlist: results[1], //需求列表
-          vslist: results[0]  //版本列表
-        });
+      if(pid == '' || pid == null || pid == undefined){
+        //没有项目id，直接回个人主页
+        res.render('home', { title: '个人主页' });
+      }else{
+        //同步查询 版本列表，需求列表 。--- 共同进行
+        var data = Promise.all([asyncdb.getvs_bypid(pid),asyncdb.getdm_bypid(pid),asyncdb.getpj_bypid(pid)]);
         
-      })
+        data.then(function(results){
+  
+          res.render('projectDetails', { 
+            title: '项目详细',
+            project:results[2], //操作项目
+            dmlist: results[1], //需求列表
+            vslist: results[0]  //版本列表
+          });
+          
+        })
+      }
+
 
     }else{
       res.render('login', { title: '首页' });

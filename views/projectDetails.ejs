@@ -69,6 +69,7 @@
                                         <input type="hidden" id="pid" value='<%= project.id %>'>
                                         <input type="hidden" id="pstate" value='<%= project.state %>'>
                                         <input type="hidden" id="pendtime" value='<%= project.endtime %>'>
+                                        <input type="hidden" id="pjauth" value='<%= session.pjauth %> '>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -983,6 +984,27 @@
         function cleanSelect(){
             $('.selectpicker').selectpicker('deselectAll');
         }
+
+        //检查是否有修改的权限
+        function checkAUTH(index){
+            var auth = $('#pjauth').val();
+
+            if(auth.length > 0){
+                auth = auth.split(',');
+            }else{
+                return false;
+            }
+
+            //分割后数组中元素为字符串
+            if(auth.indexOf(String(index)) == -1){
+                return false;
+            }else{
+                return true;
+            }
+
+
+        }
+
     </script>
 
     <script>
@@ -1011,6 +1033,11 @@
             //id 丢失
             if(pid == null ||pid == '' || pid == undefined){
                 alert('页面信息缺失，请刷新页面，重新修改！');
+                return ;
+            }
+
+            if(!checkAUTH(2)){
+                alert('不具备修改项目信息的权限!只有PM可以修改！');
                 return ;
             }
 
@@ -1158,6 +1185,11 @@
                 'vdesc': vdesc,
             };
 
+            if(!checkAUTH(2)){
+                alert('不具备修改增加版本的权限!只有PM可以修改！');
+                return ;
+            }
+
             $.ajax({
                 url:'/project/addVersion',
                 type:'POST',
@@ -1205,6 +1237,11 @@
             //id 丢失
             if(vid == null ||vid == '' || vid == undefined){
                 alert('页面信息缺失，请关闭之后，重新修改！');
+                return ;
+            }
+
+            if(!checkAUTH(2)){
+                alert('不具备修改版本信息的权限!只有PM可以修改！');
                 return ;
             }
 
@@ -1336,6 +1373,11 @@
                 'desc': vamDesc,
                 'pid':vampid
             };
+
+            if(!checkAUTH(2)){
+                alert('不具备添加任务的权限!只有PM可以添加！');
+                return ;
+            }
 
             $.ajax({
                 url: '/mission/add',
@@ -1509,6 +1551,13 @@
                 'dmDesc': dmDesc
             };
 
+            if(checkAUTH(2) || checkAUTH(5)){
+                //是产品或者 PM，能改没毛病
+            }else{
+                alert('不具备新增需求的权限!只有PM / 产品人员可以新增！');
+                return ;
+            }
+
             $.ajax({
                 url: '/project/addDemand',
                 type: 'POST',
@@ -1543,6 +1592,13 @@
             //id 丢失
             if(dmmdID == null ||dmmdID == '' || dmmdID == undefined){
                 alert('页面信息缺失，请关闭之后，重新修改！');
+                return ;
+            }
+
+            if(checkAUTH(2) || checkAUTH(5)){
+                //是产品或者 PM，能改没毛病
+            }else{
+                alert('不具备新增需求的权限!只有PM / 产品人员可以修改！');
                 return ;
             }
 
@@ -1598,6 +1654,11 @@
              //不可为空
             if(msvid == null){
                 alert('请选择所属版本！');
+                return ;
+            }
+
+            if(!checkAUTH(2)){
+                alert('不具备添加任务的权限!只有PM可以添加！');
                 return ;
             }
         
@@ -1870,6 +1931,11 @@
                 alert('请选择所属版本！');
                 return ;
             }
+
+            if(!checkAUTH(2)){
+                alert('不具备添加任务的权限!只有PM可以添加！');
+                return ;
+            }
         
             var submitData = {
                 'name': msname,
@@ -1931,6 +1997,11 @@
             //id 丢失
             if(msmdid == null ||msmdid == '' || msmdid == undefined){
                 alert('页面信息缺失，请关闭之后，重新修改！');
+                return ;
+            }
+
+            if(!checkAUTH(2)){
+                alert('不具备修改任务的权限!只有PM可以修改！');
                 return ;
             }
 
@@ -2232,6 +2303,11 @@
                 return;
             }
 
+            if(!checkAUTH(2)){
+                alert('不具备添加组员的权限!只有PM可以添加！');
+                return ;
+            }
+
             var pid = $('#pid').val();
             var gid = $('#gidSelected').val();
             var checkArr = checked.join(',');
@@ -2271,6 +2347,11 @@
             var gid = $('#gidSelected').val();
             var delMemberid = $('#delMemberid').val();
             
+            if(!checkAUTH(2)){
+                alert('不具备删除组员的权限!只有PM可以删除！');
+                return ;
+            }
+
             var submitData ={
                 pid:pid,
                 gid:gid,
@@ -2322,6 +2403,11 @@
                 return;
             }
 
+            if(!checkAUTH(2)){
+                alert('不具备分配任务的权限!只有PM可以分配！');
+                return ;
+            }
+
             var submitData ={
                 pid:pid,
                 gid:gid,
@@ -2354,6 +2440,8 @@
         }
 
     </script>
+
+
 </body>
 
 </html>
