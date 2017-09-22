@@ -12,7 +12,7 @@ var http = require('http');
  * 定义启动端口
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '10333');
 app.set('port', port);
 
 /**
